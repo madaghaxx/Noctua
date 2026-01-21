@@ -1,0 +1,81 @@
+<div class="comment-section">
+  <div class="comment-form">
+    <h3 class="volt-glow-text">Comments</h3>
+    <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ editingCommentId ? 'Edit comment' : 'Add a comment' }}</mat-label>
+        <textarea
+          matInput
+          formControlName="content"
+          rows="3"
+          placeholder="Share your thoughts..."
+        ></textarea>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-button *ngIf="editingCommentId" type="button" (click)="cancelEdit()">
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="commentForm.invalid || submitting"
+          class="volt-glow"
+        >
+          <mat-icon>{{ editingCommentId ? 'edit' : 'send' }}</mat-icon>
+          {{ editingCommentId ? 'Update' : 'Comment' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="comments-list">
+    <div *ngIf="loading" class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading comments...</p>
+    </div>
+
+    <div *ngIf="!loading && comments.length === 0" class="empty-state">
+      <mat-icon>chat_bubble_outline</mat-icon>
+      <p>No comments yet. Be the first to comment!</p>
+    </div>
+
+    <div *ngFor="let comment of comments" class="comment-item">
+      <div class="comment-header">
+        <div class="user-info">
+          <div class="avatar">
+            <img *ngIf="comment.userAvatar" [src]="comment.userAvatar" [alt]="comment.username" />
+            <mat-icon *ngIf="!comment.userAvatar">account_circle</mat-icon>
+          </div>
+          <div class="user-details">
+            <span class="username">{{ comment.username }}</span>
+            <span class="timestamp">{{ getTimeAgo(comment.createdAt) }}</span>
+            <span *ngIf="comment.createdAt !== comment.updatedAt" class="edited">(edited)</span>
+          </div>
+        </div>
+
+        <button mat-icon-button [matMenuTriggerFor]="commentMenu" *ngIf="canModify(comment)">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #commentMenu="matMenu">
+          <button mat-menu-item (click)="editComment(comment)">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+          <button mat-menu-item (click)="deleteComment(comment.id)" class="delete-btn">
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </mat-menu>
+      </div>
+
+      <div class="comment-content">
+        <p>{{ comment.content }}</p>
+      </div>
+    </div>
+  </div>
+</div>

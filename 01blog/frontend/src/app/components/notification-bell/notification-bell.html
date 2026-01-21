@@ -1,0 +1,57 @@
+<button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="notification-bell">
+  <mat-icon
+    [matBadge]="unreadCount"
+    [matBadgeHidden]="unreadCount === 0"
+    matBadgeColor="warn"
+    matBadgeSize="small"
+  >
+    notifications
+  </mat-icon>
+</button>
+
+<mat-menu #notificationMenu="matMenu" class="notification-menu">
+  <div class="notification-header" (click)="$event.stopPropagation()">
+    <h3>Notifications</h3>
+    <button mat-button (click)="markAllAsRead()" *ngIf="unreadCount > 0" class="mark-read-btn">
+      Mark all read
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="notification-list">
+    <div *ngIf="loading" class="loading-container">
+      <p>Loading...</p>
+    </div>
+
+    <div *ngIf="!loading && notifications.length === 0" class="empty-state">
+      <mat-icon>notifications_none</mat-icon>
+      <p>No notifications yet</p>
+    </div>
+
+    <button
+      mat-menu-item
+      *ngFor="let notification of notifications"
+      (click)="onNotificationClick(notification)"
+      [class.unread]="!notification.isRead"
+      class="notification-item"
+    >
+      <div class="notification-content">
+        <mat-icon [class]="'notification-icon ' + notification.type.toLowerCase()">
+          {{ getNotificationIcon(notification.type) }}
+        </mat-icon>
+        <div class="notification-text">
+          <p class="message">{{ notification.message }}</p>
+          <span class="time">{{ getTimeAgo(notification.createdAt) }}</span>
+        </div>
+      </div>
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <button mat-menu-item routerLink="/notifications" class="view-all-btn">
+    <mat-icon>open_in_new</mat-icon>
+    View all notifications
+  </button>
+</mat-menu>

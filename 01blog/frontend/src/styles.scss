@@ -1,0 +1,237 @@
+/* Dante Wizard Theme - Mystical Arcane UI */
+
+@use '@angular/material' as mat;
+
+/* Mystical Purple Arcane palette */
+$wizard-primary: (
+  50: #f3e5f5,
+  100: #e1bee7,
+  200: #ce93d8,
+  300: #ba68c8,
+  400: #ab47bc,
+  500: #9c27b0,
+  // Deep mystical purple
+  600: #8e24aa,
+  700: #7b1fa2,
+  800: #6a1b9a,
+  900: #4a148c,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  ),
+);
+
+$wizard-accent: (
+  50: #fff8e1,
+  100: #ffecb3,
+  200: #ffe082,
+  300: #ffd54f,
+  400: #ffca28,
+  500: #ffc107,
+  // Enchanted gold
+  600: #ffb300,
+  700: #ffa000,
+  800: #ff8f00,
+  900: #ff6f00,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: rgba(black, 0.87),
+    600: rgba(black, 0.87),
+    700: rgba(black, 0.87),
+    800: rgba(black, 0.87),
+    900: white,
+  ),
+);
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: $wizard-primary,
+        tertiary: $wizard-accent,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  color-scheme: dark;
+  background: radial-gradient(ellipse at top, #1a0a2e 0%, #0f0520 50%, #0a0313 100%);
+  background-attachment: fixed;
+  color: #e8d4f8;
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+
+  // Mystical arcane overlay
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 30%, rgba(156, 39, 176, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255, 193, 7, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(123, 31, 162, 0.03) 0%, transparent 60%);
+    pointer-events: none;
+    animation: mysticalPulse 8s ease-in-out infinite;
+  }
+
+  // Floating magical particles
+  &::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(2px 2px at 20% 30%, rgba(255, 193, 7, 0.4), transparent),
+      radial-gradient(2px 2px at 40% 70%, rgba(156, 39, 176, 0.4), transparent),
+      radial-gradient(1px 1px at 60% 50%, rgba(255, 193, 7, 0.3), transparent),
+      radial-gradient(1px 1px at 80% 10%, rgba(186, 104, 200, 0.3), transparent),
+      radial-gradient(2px 2px at 90% 60%, rgba(255, 193, 7, 0.4), transparent);
+    background-size: 200% 200%;
+    pointer-events: none;
+    animation: floatingParticles 20s linear infinite;
+  }
+}
+
+@keyframes mysticalPulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes floatingParticles {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Arcane scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9c27b0 #1a0a2e;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #1a0a2e 0%, #0f0520 100%);
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9c27b0 0%, #7b1fa2 50%, #6a1b9a 100%);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(156, 39, 176, 0.5), inset 0 0 6px rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ab47bc 0%, #8e24aa 50%, #7b1fa2 100%);
+  box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), 0 0 25px rgba(255, 193, 7, 0.4),
+    inset 0 0 8px rgba(255, 193, 7, 0.3);
+}
+
+/* Magical glow effects */
+.wizard-glow {
+  box-shadow: 0 0 15px rgba(156, 39, 176, 0.4), 0 0 30px rgba(156, 39, 176, 0.2),
+    0 0 45px rgba(255, 193, 7, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.6), 0 0 40px rgba(156, 39, 176, 0.4),
+      0 0 60px rgba(255, 193, 7, 0.3);
+    transform: translateY(-2px);
+  }
+}
+
+.enchanted-gold {
+  color: #ffd54f;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5), 0 0 20px rgba(255, 193, 7, 0.3),
+    0 0 30px rgba(255, 193, 7, 0.2);
+  font-weight: 500;
+}
+
+/* Arcane border effect */
+.arcane-border {
+  border: 2px solid transparent;
+  background: linear-gradient(#1a0a2e, #1a0a2e) padding-box,
+    linear-gradient(135deg, #9c27b0, #ffc107, #9c27b0) border-box;
+  border-radius: 8px;
+}
+
+/* Mystical card styling */
+.wizard-card {
+  background: linear-gradient(135deg, rgba(26, 10, 46, 0.9) 0%, rgba(15, 5, 32, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(156, 39, 176, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(156, 39, 176, 0.2),
+    inset 0 0 20px rgba(255, 193, 7, 0.05);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(156, 39, 176, 0.6);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5), 0 0 30px rgba(156, 39, 176, 0.4),
+      inset 0 0 30px rgba(255, 193, 7, 0.1);
+    transform: translateY(-4px);
+  }
+}
+
+/* Enchanted button styles */
+.wizard-button {
+  background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4), inset 0 0 10px rgba(255, 193, 7, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);
+    box-shadow: 0 6px 25px rgba(156, 39, 176, 0.6), 0 0 30px rgba(255, 193, 7, 0.3),
+      inset 0 0 15px rgba(255, 193, 7, 0.2);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}

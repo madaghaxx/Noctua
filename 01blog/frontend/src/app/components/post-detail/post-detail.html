@@ -1,0 +1,117 @@
+<div class="post-detail-container" *ngIf="!loading() && post()">
+  <div class="post-header">
+    <button mat-icon-button (click)="goBack()" class="back-btn">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Post Details</h1>
+  </div>
+
+  <mat-card class="post-card">
+    <mat-card-header>
+      <div
+        mat-card-avatar
+        class="post-avatar"
+        (click)="viewProfile()"
+        [style.background-image]="getAvatarUrl()"
+      >
+        <mat-icon *ngIf="!post()?.owner?.avatar">person</mat-icon>
+      </div>
+      <mat-card-title (click)="viewProfile()" class="clickable">{{
+        post()?.owner?.username || ''
+      }}</mat-card-title>
+      <mat-card-subtitle>{{ createdAt() | timeAgo }}</mat-card-subtitle>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="postMenu"
+        *ngIf="canEdit()"
+        class="post-menu-btn"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #postMenu="matMenu">
+        <button mat-menu-item (click)="editPost()">
+          <mat-icon>edit</mat-icon>
+          <span>Edit Post</span>
+        </button>
+        <button mat-menu-item (click)="deletePost()">
+          <mat-icon>delete</mat-icon>
+          <span>Delete Post</span>
+        </button>
+      </mat-menu>
+    </mat-card-header>
+
+    <mat-card-content>
+      <h2 class="post-title">{{ post()?.title }}</h2>
+
+      <div class="post-media" *ngIf="mediaUrls().length > 0">
+        <div class="media-carousel">
+          <img [src]="mediaUrls()[currentMediaIndex()]" [alt]="post()?.title" class="media-image" />
+
+          <button
+            mat-icon-button
+            class="nav-btn prev-btn"
+            (click)="prevMedia()"
+            *ngIf="currentMediaIndex() > 0"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <button
+            mat-icon-button
+            class="nav-btn next-btn"
+            (click)="nextMedia()"
+            *ngIf="currentMediaIndex() < mediaUrls().length - 1"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+
+          <div class="media-indicators" *ngIf="mediaUrls().length > 1">
+            <span
+              *ngFor="let media of mediaUrls(); let i = index"
+              class="indicator"
+              [class.active]="i === currentMediaIndex()"
+              (click)="setCurrentMediaIndex(i)"
+            ></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-content">
+        <p [innerHTML]="content() | nl2br"></p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="post-stats">
+        <button mat-button (click)="toggleLike()" [class.liked]="isLiked()" class="like-btn">
+          <mat-icon>{{ isLiked() ? 'favorite' : 'favorite_border' }}</mat-icon>
+          <span>{{ post()?.likeCount || 0 }} Likes</span>
+        </button>
+        <div class="stat">
+          <mat-icon>comment</mat-icon>
+          <span>{{ post()?.commentCount || 0 }} Comments</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="comments-section">
+    <h3>Comments</h3>
+    <app-comment-section
+      [postId]="postId()"
+      (commentAdded)="onCommentAdded()"
+      (commentDeleted)="onCommentDeleted()"
+    ></app-comment-section>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="loading()">
+  <mat-spinner diameter="50"></mat-spinner>
+  <p>Loading post...</p>
+</div>
+
+<div class="error-container" *ngIf="!loading() && !post()">
+  <mat-icon>error_outline</mat-icon>
+  <h3>Post not found</h3>
+  <button mat-raised-button color="primary" (click)="goBack()">Go Back</button>
+</div>

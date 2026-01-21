@@ -1,0 +1,55 @@
+<div class="profile-container">
+  <mat-card class="profile-header volt-glow">
+    <div class="cover-image"></div>
+
+    <div class="profile-info">
+      <div class="avatar-section">
+        <div class="avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+      </div>
+
+      <div class="user-details">
+        <h1 class="username gold-accent">Username</h1>
+        <p class="user-stats">
+          <span class="stat">
+            <strong class="volt-text">{{ subscriberCount }}</strong> subscribers
+          </span>
+          <span class="stat">
+            <strong class="volt-text">{{ subscriptionCount }}</strong> subscriptions
+          </span>
+        </p>
+      </div>
+
+      <div class="profile-actions" *ngIf="!isOwnProfile">
+        <button
+          mat-raised-button
+          [color]="isSubscribed ? 'accent' : 'primary'"
+          (click)="toggleSubscription()"
+          [disabled]="loading"
+          class="subscribe-btn volt-glow"
+        >
+          <mat-icon>{{ isSubscribed ? 'check' : 'person_add' }}</mat-icon>
+          {{ isSubscribed ? 'Subscribed' : 'Subscribe' }}
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="profile-content volt-glow">
+    <mat-tab-group animationDuration="300ms" color="primary">
+      <mat-tab label="Posts">
+        <div class="tab-content">
+          <p class="empty-message">Posts will appear here</p>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="About">
+        <div class="tab-content">
+          <h3 class="volt-text">About</h3>
+          <p>User bio and information will appear here</p>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

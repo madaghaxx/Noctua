@@ -1,0 +1,97 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit Post' : 'Create New Post' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="postForm" class="post-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Enter post title" maxlength="200" />
+      <mat-hint align="end">{{ postForm.get('title')?.value?.length || 0 }}/200</mat-hint>
+      <mat-error *ngIf="postForm.get('title')?.hasError('required')"> Title is required </mat-error>
+      <mat-error *ngIf="postForm.get('title')?.hasError('minlength')">
+        Title must be at least 3 characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Content</mat-label>
+      <textarea
+        matInput
+        formControlName="content"
+        placeholder="Write your post content..."
+        rows="10"
+      ></textarea>
+      <mat-error *ngIf="postForm.get('content')?.hasError('required')">
+        Content is required
+      </mat-error>
+      <mat-error *ngIf="postForm.get('content')?.hasError('minlength')">
+        Content must be at least 10 characters
+      </mat-error>
+    </mat-form-field>
+
+    <div class="media-section">
+      <div class="media-header">
+        <h3>Media</h3>
+        <label class="upload-btn">
+          <input
+            type="file"
+            multiple
+            accept="image/*,video/*"
+            (change)="onFileSelected($event)"
+            style="display: none"
+          />
+          <button
+            mat-stroked-button
+            type="button"
+            onclick="this.parentElement.querySelector('input').click()"
+          >
+            <mat-icon>add_photo_alternate</mat-icon>
+            Add Media
+          </button>
+        </label>
+      </div>
+
+      <div class="existing-media" *ngIf="existingMedia.length > 0">
+        <h4>Existing Media</h4>
+        <div class="media-grid">
+          <div *ngFor="let media of existingMedia; let i = index" class="media-item">
+            <img [src]="media" alt="Existing media" />
+            <button
+              mat-icon-button
+              class="remove-btn"
+              (click)="removeExistingMedia(i)"
+              type="button"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="media-preview" *ngIf="mediaPreview.length > 0">
+        <h4>New Media</h4>
+        <div class="media-grid">
+          <div *ngFor="let preview of mediaPreview; let i = index" class="media-item">
+            <img [src]="preview" alt="Preview" />
+            <button mat-icon-button class="remove-btn" (click)="removeFile(i)" type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" [disabled]="loading">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="postForm.invalid || loading"
+    class="submit-btn"
+  >
+    <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+    <span *ngIf="!loading">{{ isEditMode ? 'Update' : 'Create' }} Post</span>
+  </button>
+</mat-dialog-actions>

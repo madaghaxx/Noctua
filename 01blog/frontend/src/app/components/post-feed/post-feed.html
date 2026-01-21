@@ -1,0 +1,94 @@
+<div class="post-feed-container">
+  <div class="feed-header">
+    <h2>Latest Posts</h2>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()" class="create-btn">
+      <mat-icon>add</mat-icon>
+      Create Post
+    </button>
+  </div>
+
+  <div class="posts-grid" *ngIf="posts().length > 0">
+    <mat-card *ngFor="let post of posts()" class="post-card" (click)="viewPost(post.id)">
+      <mat-card-header>
+        <div
+          mat-card-avatar
+          class="post-avatar"
+          [style.background-image]="post.owner.avatar ? 'url(' + post.owner.avatar + ')' : 'none'"
+        >
+          <mat-icon *ngIf="!post.owner.avatar">person</mat-icon>
+        </div>
+        <mat-card-title>{{ post.owner.username }}</mat-card-title>
+        <mat-card-subtitle>{{ post.createdAt | timeAgo }}</mat-card-subtitle>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="postMenu"
+          *ngIf="canEdit(post)"
+          (click)="$event.stopPropagation()"
+          class="post-menu-btn"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #postMenu="matMenu">
+          <button mat-menu-item (click)="editPost(post, $event)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item (click)="deletePost(post.id, $event)" color="warn">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </mat-card-header>
+
+      <mat-card-content>
+        <h3 class="post-title">{{ post.title }}</h3>
+        <p class="post-excerpt">
+          {{ post.excerpt || post.content.substring(0, 200)
+          }}{{ post.content.length > 200 ? '...' : '' }}
+        </p>
+
+        <div class="post-media" *ngIf="post.mediaUrls && post.mediaUrls.length > 0">
+          <img [src]="post.mediaUrls[0]" [alt]="post.title" class="media-preview" />
+          <div class="media-count" *ngIf="post.mediaUrls.length > 1">
+            +{{ post.mediaUrls.length - 1 }} more
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="post-actions">
+        <button mat-button (click)="toggleLike(post.id, $event)" [class.liked]="isLiked(post.id)">
+          <mat-icon>{{ isLiked(post.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+          <span>{{ post.likeCount || 0 }}</span>
+        </button>
+        <button mat-button (click)="viewPost(post.id); $event.stopPropagation()">
+          <mat-icon>comment</mat-icon>
+          <span>{{ post.commentCount || 0 }}</span>
+        </button>
+        <button mat-button (click)="viewPost(post.id); $event.stopPropagation()">
+          <mat-icon>visibility</mat-icon>
+          <span>Read More</span>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="loading-container" *ngIf="loading() && posts().length === 0">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading posts...</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading() && posts().length === 0">
+    <mat-icon>article</mat-icon>
+    <h3>No posts yet</h3>
+    <p>Be the first to create a post!</p>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">Create Post</button>
+  </div>
+
+  <div class="load-more" *ngIf="!loading() && page() < totalPages() - 1">
+    <button mat-stroked-button (click)="loadMore()">Load More</button>
+  </div>
+
+  <div class="loading-more" *ngIf="loading() && posts().length > 0">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
+</div>

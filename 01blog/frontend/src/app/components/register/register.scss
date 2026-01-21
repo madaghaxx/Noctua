@@ -1,0 +1,84 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #0a0e14 0%, #1a1f2e 100%);
+}
+
+.register-card {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(26, 31, 46, 0.95);
+  border: 2px solid #e91e63;
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(233, 30, 99, 0.3);
+}
+
+mat-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 16px;
+  border-bottom: 1px solid #e91e63;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #e91e63;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #f48fb1;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+mat-card-content {
+  padding: 0 24px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.submit-btn {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+
+  mat-spinner {
+    margin: 0 auto;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid rgba(233, 30, 99, 0.3);
+}
+
+.login-text {
+  color: #f48fb1;
+  font-size: 14px;
+}
+
+.login-link {
+  color: #2196f3;
+  font-weight: 600;
+  letter-spacing: 1px;
+}

@@ -1,0 +1,175 @@
+.subscriptions-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page-title {
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: #00bcff;
+  text-shadow: 0 0 12px rgba(0, 188, 255, 0.4);
+}
+
+.subscriptions-card {
+  background: rgba(18, 24, 32, 0.8);
+
+  ::ng-deep {
+    .mat-mdc-tab-labels {
+      background: rgba(0, 188, 255, 0.05);
+      border-bottom: 2px solid rgba(0, 188, 255, 0.2);
+    }
+
+    .mat-mdc-tab {
+      color: #999;
+
+      .tab-icon {
+        margin-right: 8px;
+      }
+
+      &.mdc-tab--active {
+        .mdc-tab__text-label,
+        .tab-icon {
+          color: #00bcff;
+          text-shadow: 0 0 8px rgba(0, 188, 255, 0.3);
+        }
+      }
+    }
+
+    .mat-mdc-tab-body-content {
+      padding: 0;
+    }
+  }
+}
+
+.tab-content {
+  min-height: 400px;
+
+  .loading-state {
+    padding: 48px;
+    text-align: center;
+    color: #666;
+  }
+
+  .empty-state {
+    padding: 64px 24px;
+    text-align: center;
+    color: #666;
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+      color: #00bcff;
+    }
+
+    p {
+      margin: 0 0 24px 0;
+      font-size: 16px;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-list {
+  padding: 0;
+}
+
+.user-item {
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0, 188, 255, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:hover {
+    background: rgba(0, 188, 255, 0.05);
+    border-left: 3px solid #00bcff;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: rgba(0, 188, 255, 0.1);
+      border: 2px solid rgba(0, 188, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      mat-icon {
+        color: #00bcff;
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .username {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .subscribed-date {
+        font-size: 13px;
+        color: #999;
+      }
+    }
+  }
+
+  button {
+    color: #00bcff;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateX(4px);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .subscriptions-container {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .user-item {
+    .user-info {
+      .avatar {
+        width: 48px;
+        height: 48px;
+
+        mat-icon {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+  }
+}

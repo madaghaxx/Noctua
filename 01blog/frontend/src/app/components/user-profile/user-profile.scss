@@ -1,0 +1,164 @@
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.profile-header {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: rgba(18, 24, 32, 0.8);
+
+  .cover-image {
+    height: 200px;
+    background: linear-gradient(135deg, #00bcff 0%, #0077b6 100%);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(255, 193, 7, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(0, 188, 255, 0.2) 0%, transparent 50%);
+    }
+  }
+
+  .profile-info {
+    padding: 0 24px 24px;
+    position: relative;
+
+    .avatar-section {
+      margin-top: -60px;
+      margin-bottom: 16px;
+
+      .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(0, 188, 255, 0.1);
+        border: 4px solid rgba(0, 188, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 20px rgba(0, 188, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.4);
+
+        mat-icon {
+          font-size: 80px;
+          width: 80px;
+          height: 80px;
+          color: #00bcff;
+        }
+      }
+    }
+
+    .user-details {
+      margin-bottom: 16px;
+
+      .username {
+        font-size: 28px;
+        margin: 0 0 8px 0;
+        font-weight: 600;
+      }
+
+      .user-stats {
+        display: flex;
+        gap: 24px;
+        margin: 0;
+        color: #999;
+
+        .stat {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          strong {
+            color: #00bcff;
+            font-size: 18px;
+          }
+        }
+      }
+    }
+
+    .profile-actions {
+      .subscribe-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 24px;
+        height: 42px;
+      }
+    }
+  }
+}
+
+.profile-content {
+  background: rgba(18, 24, 32, 0.6);
+
+  ::ng-deep {
+    .mat-mdc-tab-labels {
+      background: rgba(0, 188, 255, 0.05);
+      border-bottom: 2px solid rgba(0, 188, 255, 0.2);
+    }
+
+    .mat-mdc-tab {
+      color: #999;
+
+      &.mdc-tab--active {
+        .mdc-tab__text-label {
+          color: #00bcff;
+          text-shadow: 0 0 8px rgba(0, 188, 255, 0.3);
+        }
+      }
+    }
+
+    .mat-mdc-tab-body-content {
+      padding: 24px;
+    }
+  }
+
+  .tab-content {
+    min-height: 300px;
+
+    .volt-text {
+      color: #00bcff;
+      text-shadow: 0 0 8px rgba(0, 188, 255, 0.3);
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #666;
+      padding: 48px;
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    .cover-image {
+      height: 150px;
+    }
+
+    .profile-info {
+      .avatar-section .avatar {
+        width: 80px;
+        height: 80px;
+        margin-top: -40px;
+
+        mat-icon {
+          font-size: 56px;
+          width: 56px;
+          height: 56px;
+        }
+      }
+
+      .user-details .username {
+        font-size: 22px;
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+<div class="subscriptions-container">
+  <h1 class="page-title volt-glow-text">Subscriptions</h1>
+
+  <mat-card class="subscriptions-card volt-glow">
+    <mat-tab-group animationDuration="300ms" color="primary">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">people</mat-icon>
+          Following ({{ subscriptions.length }})
+        </ng-template>
+
+        <div class="tab-content">
+          <div *ngIf="loadingSubscriptions" class="loading-state">
+            <p>Loading...</p>
+          </div>
+
+          <div *ngIf="!loadingSubscriptions && subscriptions.length === 0" class="empty-state">
+            <mat-icon>people_outline</mat-icon>
+            <p>You're not following anyone yet</p>
+            <button mat-raised-button color="primary" routerLink="/home">Discover users</button>
+          </div>
+
+          <mat-list *ngIf="!loadingSubscriptions && subscriptions.length > 0">
+            <mat-list-item *ngFor="let sub of subscriptions" class="user-item volt-glow">
+              <div class="user-info" (click)="viewProfile(sub.subscribedToId)">
+                <div class="avatar">
+                  <img
+                    *ngIf="sub.subscribedToAvatar"
+                    [src]="sub.subscribedToAvatar"
+                    [alt]="sub.subscribedToUsername"
+                  />
+                  <mat-icon *ngIf="!sub.subscribedToAvatar">account_circle</mat-icon>
+                </div>
+                <div class="user-details">
+                  <span class="username gold-accent">{{ sub.subscribedToUsername }}</span>
+                  <span class="subscribed-date">Subscribed {{ getTimeAgo(sub.createdAt) }}</span>
+                </div>
+              </div>
+              <button mat-icon-button (click)="viewProfile(sub.subscribedToId)">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">group</mat-icon>
+          Followers ({{ subscribers.length }})
+        </ng-template>
+
+        <div class="tab-content">
+          <div *ngIf="loadingSubscribers" class="loading-state">
+            <p>Loading...</p>
+          </div>
+
+          <div *ngIf="!loadingSubscribers && subscribers.length === 0" class="empty-state">
+            <mat-icon>group</mat-icon>
+            <p>No followers yet</p>
+          </div>
+
+          <mat-list *ngIf="!loadingSubscribers && subscribers.length > 0">
+            <mat-list-item *ngFor="let sub of subscribers" class="user-item volt-glow">
+              <div class="user-info" (click)="viewProfile(sub.subscriberId)">
+                <div class="avatar">
+                  <mat-icon>account_circle</mat-icon>
+                </div>
+                <div class="user-details">
+                  <span class="username gold-accent">{{ sub.subscriberUsername }}</span>
+                  <span class="subscribed-date">Followed {{ getTimeAgo(sub.createdAt) }}</span>
+                </div>
+              </div>
+              <button mat-icon-button (click)="viewProfile(sub.subscriberId)">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>
