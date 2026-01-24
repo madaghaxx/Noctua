@@ -67,11 +67,17 @@
         </div>
       </div>
 
-      <div class="media-preview" *ngIf="mediaPreview.length > 0">
+      <div class="media-preview" *ngIf="mediaPreview().length > 0">
         <h4>New Media</h4>
         <div class="media-grid">
-          <div *ngFor="let preview of mediaPreview; let i = index" class="media-item">
-            <img [src]="preview" alt="Preview" />
+          <div *ngFor="let preview of mediaPreview(); let i = index" class="media-item">
+            <img *ngIf="preview.type === 'image'" [src]="preview.url" alt="Preview" />
+            <video
+              *ngIf="preview.type === 'video'"
+              [src]="preview.url"
+              controls
+              class="preview-video"
+            ></video>
             <button mat-icon-button class="remove-btn" (click)="removeFile(i)" type="button">
               <mat-icon>close</mat-icon>
             </button>

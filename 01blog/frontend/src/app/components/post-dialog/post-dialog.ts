@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -33,7 +33,7 @@ export class PostDialogComponent implements OnInit {
   isEditMode = false;
   loading = false;
   selectedFiles: File[] = [];
-  mediaPreview: string[] = [];
+  mediaPreview = signal<{ url: string; type: string }[]>([]);
   existingMedia: string[] = [];
 
   constructor(
@@ -67,22 +67,32 @@ export class PostDialogComponent implements OnInit {
       const files = Array.from(input.files);
       this.selectedFiles.push(...files);
 
-      // Create preview for images
+      // Create previews for images and videos
+      const newPreviews: { url: string; type: string }[] = [];
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
           const reader = new FileReader();
           reader.onload = (e) => {
-            this.mediaPreview.push(e.target?.result as string);
+            newPreviews.push({ url: e.target?.result as string, type: 'image' });
+            this.mediaPreview.set([...this.mediaPreview(), ...newPreviews]);
           };
           reader.readAsDataURL(file);
+        } else if (file.type.startsWith('video/')) {
+          const url = URL.createObjectURL(file);
+          newPreviews.push({ url, type: 'video' });
+          this.mediaPreview.set([...this.mediaPreview(), ...newPreviews]);
         }
       });
     }
   }
 
   removeFile(index: number) {
+    const preview = this.mediaPreview()[index];
+    if (preview.type === 'video' && preview.url.startsWith('blob:')) {
+      URL.revokeObjectURL(preview.url);
+    }
     this.selectedFiles.splice(index, 1);
-    this.mediaPreview.splice(index, 1);
+    this.mediaPreview.set(this.mediaPreview().filter((_, i) => i !== index));
   }
 
   removeExistingMedia(index: number) {

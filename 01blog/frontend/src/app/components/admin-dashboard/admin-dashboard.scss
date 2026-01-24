@@ -1,0 +1,317 @@
+.admin-dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+
+  .dashboard-header {
+    margin-bottom: 30px;
+
+    h1 {
+      color: #ffd54f;
+      margin-bottom: 8px;
+      font-size: 2.5rem;
+      text-shadow: 0 0 20px rgba(255, 213, 79, 0.5);
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.1rem;
+    }
+  }
+
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+
+    .analytics-card {
+      background: linear-gradient(135deg, rgba(26, 10, 46, 0.8), rgba(15, 5, 32, 0.8));
+      border: 1px solid rgba(156, 39, 176, 0.3);
+      backdrop-filter: blur(10px);
+
+      mat-card-content {
+        padding: 20px !important;
+
+        .metric {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+
+          mat-icon {
+            font-size: 2.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #00bcff;
+          }
+
+          &.warning mat-icon {
+            color: #ff9800;
+          }
+
+          .metric-info {
+            h3 {
+              margin: 0;
+              font-size: 2rem;
+              font-weight: 600;
+              color: #ffd54f;
+            }
+
+            p {
+              margin: 5px 0 0 0;
+              color: rgba(255, 255, 255, 0.7);
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    padding: 20px 0;
+
+    mat-card {
+      background: linear-gradient(135deg, rgba(26, 10, 46, 0.8), rgba(15, 5, 32, 0.8));
+      border: 1px solid rgba(156, 39, 176, 0.3);
+      backdrop-filter: blur(10px);
+
+      mat-card-content {
+        padding: 0 !important;
+      }
+    }
+
+    // Users table
+    .users-table {
+      width: 100%;
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(0, 188, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        background-position: center;
+
+        mat-icon {
+          color: #00bcff;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .user-stats {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 0.9rem;
+
+          mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+
+    // Posts table
+    .posts-table {
+      width: 100%;
+
+      .post-title {
+        font-weight: 600;
+        color: #ffd54f;
+        margin-bottom: 4px;
+      }
+
+      .post-excerpt {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .post-owner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .owner-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(0, 188, 255, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-size: cover;
+          background-position: center;
+
+          mat-icon {
+            color: #00bcff;
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      .post-stats {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 0.9rem;
+
+          mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+
+    // Reports table
+    .reports-table {
+      width: 100%;
+
+      .report-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .user-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(0, 188, 255, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-size: cover;
+          background-position: center;
+
+          mat-icon {
+            color: #00bcff;
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      .report-reason {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .report-actions {
+        display: flex;
+        gap: 8px;
+      }
+    }
+
+    // Table styling
+    ::ng-deep {
+      .mat-mdc-table {
+        background: transparent;
+
+        .mat-mdc-header-row {
+          background: rgba(156, 39, 176, 0.1);
+
+          .mat-mdc-header-cell {
+            color: #ffd54f;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(156, 39, 176, 0.3);
+          }
+        }
+
+        .mat-mdc-row {
+          border-bottom: 1px solid rgba(156, 39, 176, 0.1);
+
+          &:hover {
+            background: rgba(156, 39, 176, 0.05);
+          }
+
+          .mat-mdc-cell {
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom: none;
+          }
+        }
+      }
+
+      .mat-mdc-paginator {
+        background: transparent;
+        border-top: 1px solid rgba(156, 39, 176, 0.3);
+
+        .mat-mdc-paginator-container {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+    }
+
+    // Menu actions
+    .delete-action {
+      color: #f44336 !important;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .admin-dashboard-container {
+    padding: 10px;
+
+    .dashboard-header h1 {
+      font-size: 2rem;
+    }
+
+    .analytics-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tab-content {
+      .users-table,
+      .posts-table,
+      .reports-table {
+        .user-stats,
+        .post-stats {
+          flex-direction: column;
+          gap: 8px;
+          align-items: flex-start;
+        }
+
+        .report-actions {
+          flex-direction: column;
+          gap: 4px;
+
+          button {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+          }
+        }
+      }
+    }
+  }
+}

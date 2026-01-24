@@ -51,4 +51,8 @@ export class Home implements OnInit {
   goToSubscriptions(): void {
     this.router.navigate(['/subscriptions']);
   }
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 }

@@ -8,9 +8,5 @@ services:
       POSTGRES_PASSWORD: vor_speaks_truth
     ports:
       - "5432:5432"
-    volumes:
-      - blog_pgdata:/var/lib/postgresql/data
     restart: unless-stopped
 
-volumes:
-  blog_pgdata:

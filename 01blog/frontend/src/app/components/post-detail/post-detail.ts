@@ -60,7 +60,6 @@ export class PostDetailComponent implements OnInit {
 
   ngOnInit() {
     // Get current user from auth service
-    console.log('sssss');
     const currentUser = this.authService.currentUser;
     this.currentUserId.set(currentUser?.id || null);
 
@@ -84,7 +83,6 @@ export class PostDetailComponent implements OnInit {
     this.cdr.detectChanges();
     this.postService.getPostById(postId).subscribe({
       next: (post) => {
-        console.log('test');
         if (post.mediaUrls && post.mediaUrls.length > 0) {
           post.mediaUrls = post.mediaUrls.map((url) => {
             if (url.startsWith('/')) {
@@ -92,7 +90,6 @@ export class PostDetailComponent implements OnInit {
             }
             return url;
           });
-          console.log('Transformed media URLs:', post.mediaUrls);
         }
         this.post.set(post);
         this.loading.set(false);
@@ -230,6 +227,11 @@ export class PostDetailComponent implements OnInit {
 
   setCurrentMediaIndex(index: number) {
     this.currentMediaIndex.set(index);
+  }
+
+  isVideo(url: string): boolean {
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv'];
+    return videoExtensions.some((ext) => url.toLowerCase().includes(ext));
   }
 
   onCommentAdded() {

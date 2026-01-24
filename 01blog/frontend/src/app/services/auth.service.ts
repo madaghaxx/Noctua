@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginRequest, RegisterRequest, AuthResponse, ApiResponse } from '../models/auth.model';
 
 @Injectable({
@@ -15,7 +16,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<AuthResponse | null>(this.getCurrentUser());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private snackBar: MatSnackBar) {}
 
   register(request: RegisterRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(`${this.API_URL}/auth/register`, request).pipe(
@@ -37,10 +38,15 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  logout(message?: string): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     this.currentUserSubject.next(null);
+
+    if (message) {
+      this.snackBar.open(message, 'Close', { duration: 5000 });
+    }
+
     this.router.navigate(['/login']);
   }
 

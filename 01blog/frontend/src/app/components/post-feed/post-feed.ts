@@ -5,7 +5,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { PostService } from '../../services/post.service';
@@ -24,7 +23,6 @@ import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatChipsModule,
     MatDialogModule,
     MatMenuModule,
     TimeAgoPipe,
@@ -204,5 +202,11 @@ export class PostFeedComponent implements OnInit {
     if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
     if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
     return new Date(date).toLocaleDateString();
+  }
+
+  isVideo(url: string): boolean {
+    return ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'].some((ext) =>
+      url.toLowerCase().includes(ext)
+    );
   }
 }

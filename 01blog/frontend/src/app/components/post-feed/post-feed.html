@@ -48,7 +48,18 @@
         </p>
 
         <div class="post-media" *ngIf="post.mediaUrls && post.mediaUrls.length > 0">
-          <img [src]="post.mediaUrls[0]" [alt]="post.title" class="media-preview" />
+          <img
+            *ngIf="!isVideo(post.mediaUrls[0])"
+            [src]="post.mediaUrls[0]"
+            [alt]="post.title"
+            class="media-preview"
+          />
+          <video
+            *ngIf="isVideo(post.mediaUrls[0])"
+            [src]="post.mediaUrls[0]"
+            class="media-preview"
+            muted
+          ></video>
           <div class="media-count" *ngIf="post.mediaUrls.length > 1">
             +{{ post.mediaUrls.length - 1 }} more
           </div>

@@ -156,6 +156,14 @@
           display: block;
         }
 
+        .media-video {
+          width: 100%;
+          height: auto;
+          max-height: 600px;
+          object-fit: contain;
+          display: block;
+        }
+
         .nav-btn {
           position: absolute;
           top: 50%;

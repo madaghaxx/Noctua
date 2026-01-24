@@ -45,7 +45,18 @@
 
       <div class="post-media" *ngIf="mediaUrls().length > 0">
         <div class="media-carousel">
-          <img [src]="mediaUrls()[currentMediaIndex()]" [alt]="post()?.title" class="media-image" />
+          <img
+            *ngIf="!isVideo(mediaUrls()[currentMediaIndex()])"
+            [src]="mediaUrls()[currentMediaIndex()]"
+            [alt]="post()?.title"
+            class="media-image"
+          />
+          <video
+            *ngIf="isVideo(mediaUrls()[currentMediaIndex()])"
+            [src]="mediaUrls()[currentMediaIndex()]"
+            controls
+            class="media-video"
+          ></video>
 
           <button
             mat-icon-button

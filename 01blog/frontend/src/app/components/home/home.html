@@ -41,6 +41,12 @@
       <mat-icon>person</mat-icon>
       My Profile
     </button>
+    @if (isAdmin()) {
+    <button mat-menu-item routerLink="/admin">
+      <mat-icon>admin_panel_settings</mat-icon>
+      Admin Dashboard
+    </button>
+    }
     <button mat-menu-item (click)="logout()">
       <mat-icon>exit_to_app</mat-icon>
       Logout
@@ -50,6 +56,12 @@
   <div class="content">
     <div style="display: flex; justify-content: center">
       <div style="flex: 0 0 70%; max-width: 70%; min-width: 340px">
+        @if (isAdmin()) {
+        <button mat-raised-button color="accent" routerLink="/admin" style="margin: 16px 0 0 16px">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Admin Panel
+        </button>
+        }
         <app-post-feed></app-post-feed>
       </div>
     </div>
