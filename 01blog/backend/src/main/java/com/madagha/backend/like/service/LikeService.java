@@ -1,5 +1,6 @@
 package com.madagha.backend.like.service;
 
+import com.madagha.backend.common.exception.ResourceNotFoundException;
 import com.madagha.backend.like.dto.LikeResponse;
 import com.madagha.backend.like.entity.Like;
 import com.madagha.backend.like.repository.LikeRepository;
@@ -25,13 +26,19 @@ public class LikeService {
     @Transactional
     public LikeResponse toggleLike(UUID postId, User user) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
 
         var existingLike = likeRepository.findByUserAndPost(user, post);
 
         if (existingLike.isPresent()) {
             likeRepository.delete(existingLike.get());
-            return null;
+            // Return response indicating the post is no longer liked
+            return LikeResponse.builder()
+                    .userId(user.getId())
+                    .username(user.getUsername())
+                    .postId(postId)
+                    .liked(false)
+                    .build();
         } else {
             Like like = Like.builder()
                     .user(user)

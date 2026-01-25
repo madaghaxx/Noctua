@@ -30,10 +30,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 20)
     private String username;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(unique = true, nullable = false, length = 50)
     private String email;
 
     @Column(nullable = false)

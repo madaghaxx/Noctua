@@ -12,6 +12,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { AdminService } from '../../services/admin.service';
 import { AuthService } from '../../services/auth.service';
+import { SharedHeaderComponent } from '../shared-header/shared-header';
 
 interface Analytics {
   totalUsers: number;
@@ -87,6 +88,7 @@ interface Report {
     MatSnackBarModule,
     MatMenuModule,
     MatChipsModule,
+    SharedHeaderComponent,
   ],
   templateUrl: './admin-dashboard.html',
   styleUrls: ['./admin-dashboard.scss'],

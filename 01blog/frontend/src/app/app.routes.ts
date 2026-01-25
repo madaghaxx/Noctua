@@ -37,6 +37,18 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'discover',
+    loadComponent: () =>
+      import('./components/discover-users/discover-users').then((m) => m.DiscoverUsers),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'notifications',
+    loadComponent: () =>
+      import('./components/notifications/notifications').then((m) => m.NotificationsComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: 'admin',
     loadComponent: () =>
       import('./components/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboardComponent),

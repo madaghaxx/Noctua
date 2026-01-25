@@ -7,7 +7,9 @@ import com.madagha.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,12 @@ public class UserService {
     public User getCurrentUser(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     private UserDto mapToDto(User user) {

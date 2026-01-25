@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ReportDialogComponent } from '../report-dialog/report-dialog';
+import { ReportService } from '../../services/report.service';
 import { MatMenuModule } from '@angular/material/menu';
 import { PostService } from '../../services/post.service';
 import { SocialService } from '../../services/social.service';
@@ -16,6 +18,7 @@ import { CommentSectionComponent } from '../comment-section/comment-section';
 import { PostDialogComponent } from '../post-dialog/post-dialog';
 import { Nl2brPipe } from '../../pipes/nl2br.pipe';
 import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
+import { SharedHeaderComponent } from '../shared-header/shared-header';
 
 @Component({
   selector: 'app-post-detail',
@@ -30,6 +33,7 @@ import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
     MatDialogModule,
     MatMenuModule,
     CommentSectionComponent,
+    SharedHeaderComponent,
     Nl2brPipe,
     TimeAgoPipe,
   ],
@@ -55,8 +59,35 @@ export class PostDetailComponent implements OnInit {
     private socialService: SocialService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private reportService: ReportService
   ) {}
+  openReportDialog() {
+    const post = this.post();
+    if (!post) return;
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '400px',
+      data: { postId: post.id },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.reportService
+          .createReport({
+            postId: post.id,
+            reason: result.reason,
+            details: result.details,
+          })
+          .subscribe({
+            next: () => {
+              alert('Report submitted successfully.');
+            },
+            error: () => {
+              alert('Failed to submit report.');
+            },
+          });
+      }
+    });
+  }
 
   ngOnInit() {
     // Get current user from auth service
@@ -252,17 +283,5 @@ export class PostDetailComponent implements OnInit {
         commentCount: Math.max((currentPost.commentCount || 0) - 1, 0),
       });
     }
-  }
-
-  getTimeAgo(date: string): string {
-    const now = new Date().getTime();
-    const past = new Date(date).getTime();
-    const diff = Math.floor((now - past) / 1000);
-
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
-    if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
-    return new Date(date).toLocaleDateString();
   }
 }

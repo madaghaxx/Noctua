@@ -1,0 +1,110 @@
+<app-shared-header></app-shared-header>
+
+<div class="discover-container">
+  <h1 class="page-title enchanted-gold">Discover Users</h1>
+
+  <mat-card class="discover-card wizard-card">
+    <!-- Search -->
+    <div class="search-section">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search users</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+          placeholder="Search by username..."
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Users -->
+    <div class="users-section">
+      <!-- Loading -->
+      <div *ngIf="loading()" class="loading-state">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Discovering users...</p>
+      </div>
+
+      <!-- Empty -->
+      <div *ngIf="!loading() && filteredUsers().length === 0" class="empty-state">
+        <mat-icon class="empty-icon">people_outline</mat-icon>
+        <h3>No users found</h3>
+        <p *ngIf="searchQuery">Try adjusting your search terms</p>
+        <p *ngIf="!searchQuery">No users available to discover</p>
+      </div>
+
+      <!-- Grid -->
+      <div *ngIf="!loading() && filteredUsers().length > 0" class="users-grid">
+        <mat-card
+          *ngFor="let user of filteredUsers()"
+          class="user-card"
+          (click)="viewProfile(user.id)"
+        >
+          <mat-card-header>
+            <div
+              mat-card-avatar
+              class="user-avatar"
+              [style.background-image]="user.avatar ? 'url(' + user.avatar + ')' : 'none'"
+            >
+              <mat-icon *ngIf="!user.avatar">account_circle</mat-icon>
+            </div>
+
+            <mat-card-title class="username">
+              {{ user.username }}
+            </mat-card-title>
+
+            <mat-card-subtitle class="user-role">
+              {{ user.role }}
+            </mat-card-subtitle>
+
+            <span class="subscription-signal" *ngIf="!isCurrentUser(user.id)">
+              <mat-icon
+                [ngClass]="{
+                  subscribed: isSubscribedTo(user.id),
+                  'not-subscribed': !isSubscribedTo(user.id)
+                }"
+              >
+                {{ isSubscribedTo(user.id) ? 'person_remove' : 'person_add' }}
+              </mat-icon>
+              <span class="signal-label">
+                {{ isSubscribedTo(user.id) ? 'Following' : 'Not Following' }}
+              </span>
+            </span>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="user-info">
+              <span class="join-date"> Joined {{ user.createdAt | date : 'mediumDate' }} </span>
+            </p>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button
+              mat-button
+              color="primary"
+              (click)="$event.stopPropagation(); viewProfile(user.id)"
+            >
+              <mat-icon>person</mat-icon>
+              View Profile
+            </button>
+
+            <button
+              mat-stroked-button
+              color="accent"
+              (click)="$event.stopPropagation(); toggleSubscription(user)"
+              [disabled]="isCurrentUser(user.id)"
+            >
+              <mat-icon>
+                {{ isSubscribedTo(user.id) ? 'person_remove' : 'person_add' }}
+              </mat-icon>
+              {{ isSubscribedTo(user.id) ? 'Unfollow' : 'Follow' }}
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card>
+</div>

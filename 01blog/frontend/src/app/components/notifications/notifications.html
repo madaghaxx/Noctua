@@ -1,0 +1,65 @@
+<app-shared-header></app-shared-header>
+
+<div class="notifications-container">
+  <div class="page-header">
+    <h1 class="page-title enchanted-gold">Notifications</h1>
+    <button
+      mat-raised-button
+      (click)="markAllAsRead()"
+      *ngIf="hasUnreadNotifications"
+      class="mark-all-read-btn wizard-button"
+    >
+      <mat-icon>done_all</mat-icon>
+      Mark All Read
+    </button>
+  </div>
+
+  <mat-card class="notifications-card wizard-card">
+    <div class="notifications-content">
+      <div *ngIf="loading && notifications.length === 0" class="loading-container">
+        <mat-spinner diameter="40" class="loading-spinner"></mat-spinner>
+        <p>Loading notifications...</p>
+      </div>
+
+      <div *ngIf="!loading && notifications.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">notifications_none</mat-icon>
+        <h3>No notifications yet</h3>
+        <p>You're all caught up! New notifications will appear here.</p>
+      </div>
+
+      <div *ngIf="notifications.length > 0" class="notifications-list">
+        <div
+          *ngFor="let notification of notifications; trackBy: trackByNotificationId"
+          class="notification-item"
+          [class.unread]="!notification.isRead"
+          (click)="onNotificationClick(notification)"
+        >
+          <div class="notification-content">
+            <mat-icon [class]="'notification-icon ' + notification.type.toLowerCase()">
+              {{ getNotificationIcon(notification.type) }}
+            </mat-icon>
+            <div class="notification-details">
+              <p class="notification-message">{{ notification.message }}</p>
+              <span class="notification-time">{{ notification.createdAt | timeAgo }}</span>
+            </div>
+          </div>
+          <div class="notification-actions">
+            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+          </div>
+        </div>
+
+        <div *ngIf="hasMore && !loading" class="load-more-container">
+          <button mat-stroked-button (click)="loadMore()" class="load-more-btn">
+            <mat-icon>expand_more</mat-icon>
+            Load More
+          </button>
+        </div>
+
+        <div *ngIf="loading && notifications.length > 0" class="loading-more">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Loading more...</span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

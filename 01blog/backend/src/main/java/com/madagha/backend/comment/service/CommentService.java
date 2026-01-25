@@ -58,6 +58,11 @@ public class CommentService {
                 .map(this::mapToResponse);
     }
 
+    public Page<CommentResponse> getCommentsByUser(UUID userId, Pageable pageable) {
+        return commentRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable)
+                .map(this::mapToResponse);
+    }
+
     public long getCommentCount(UUID postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));

@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -39,6 +40,14 @@ public class MediaService {
 
     private static final List<String> ALLOWED_VIDEO_TYPES = List.of(
             "video/mp4", "video/mpeg", "video/webm");
+
+    // File signatures for validation
+    private static final Map<String, byte[]> FILE_SIGNATURES = Map.of(
+            "image/jpeg", new byte[] { (byte) 0xFF, (byte) 0xD8, (byte) 0xFF },
+            "image/png", new byte[] { (byte) 0x89, 0x50, 0x4E, 0x47 },
+            "image/gif", new byte[] { (byte) 0x47, 0x49, 0x46, 0x38 },
+            "image/webp", new byte[] { (byte) 0x52, 0x49, 0x46, 0x46 },
+            "video/mp4", new byte[] { (byte) 0x00, 0x00, 0x00, 0x20, (byte) 0x66, 0x74, 0x79, 0x70 });
 
     public List<String> uploadFiles(List<MultipartFile> files, UUID postId) {
         Post post = postRepository.findById(postId)
@@ -89,6 +98,34 @@ public class MediaService {
         // Max 10MB
         if (file.getSize() > 10 * 1024 * 1024) {
             throw new RuntimeException("File size exceeds maximum limit of 10MB");
+        }
+
+        // Validate file signature to prevent malicious files with changed extensions
+        try {
+            validateFileSignature(file, contentType);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to validate file content. Please try again.");
+        }
+    }
+
+    private void validateFileSignature(MultipartFile file, String contentType) throws IOException {
+        byte[] fileSignature = FILE_SIGNATURES.get(contentType);
+        if (fileSignature == null) {
+            // For content types without specific signatures, basic validation passed
+            return;
+        }
+
+        byte[] fileBytes = file.getBytes();
+        if (fileBytes.length < fileSignature.length) {
+            throw new RuntimeException("File is too small to be a valid " + contentType + " file");
+        }
+
+        // Check if file starts with the expected signature
+        for (int i = 0; i < fileSignature.length; i++) {
+            if (fileBytes[i] != fileSignature[i]) {
+                throw new RuntimeException("File content does not match the declared file type. " +
+                        "This may be a malicious file with a changed extension.");
+            }
         }
     }
 

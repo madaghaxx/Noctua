@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SocialService } from '../../services/social.service';
 import { CommentResponse } from '../../models/social.model';
 import { AuthService } from '../../services/auth.service';
+import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
 
 @Component({
   selector: 'app-comment-section',
@@ -27,6 +28,7 @@ import { AuthService } from '../../services/auth.service';
     MatDividerModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    TimeAgoPipe,
   ],
   templateUrl: './comment-section.html',
   styleUrl: './comment-section.scss',
@@ -136,18 +138,6 @@ export class CommentSectionComponent implements OnInit {
   private resetForm(): void {
     this.commentForm.reset();
     this.editingCommentId = null;
-  }
-
-  getTimeAgo(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (seconds < 60) return 'just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
-    return date.toLocaleDateString();
   }
 
   canModify(comment: CommentResponse): boolean {

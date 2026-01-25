@@ -7,21 +7,26 @@
 .page-title {
   font-size: 32px;
   margin-bottom: 24px;
-  color: #00bcff;
-  text-shadow: 0 0 12px rgba(0, 188, 255, 0.4);
+  color: #ffd54f;
+  text-shadow: 0 0 12px rgba(255, 213, 79, 0.4);
 }
 
 .subscriptions-card {
-  background: rgba(18, 24, 32, 0.8);
+  background: linear-gradient(135deg, rgba(26, 10, 46, 0.9) 0%, rgba(15, 5, 32, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(156, 39, 176, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(156, 39, 176, 0.2),
+    inset 0 0 20px rgba(255, 193, 7, 0.05);
 
   ::ng-deep {
     .mat-mdc-tab-labels {
-      background: rgba(0, 188, 255, 0.05);
-      border-bottom: 2px solid rgba(0, 188, 255, 0.2);
+      background: rgba(156, 39, 176, 0.05);
+      border-bottom: 2px solid rgba(156, 39, 176, 0.2);
     }
 
     .mat-mdc-tab {
-      color: #999;
+      color: #ba68c8;
 
       .tab-icon {
         margin-right: 8px;
@@ -30,8 +35,8 @@
       &.mdc-tab--active {
         .mdc-tab__text-label,
         .tab-icon {
-          color: #00bcff;
-          text-shadow: 0 0 8px rgba(0, 188, 255, 0.3);
+          color: #ffd54f;
+          text-shadow: 0 0 8px rgba(255, 213, 79, 0.3);
         }
       }
     }
@@ -44,17 +49,18 @@
 
 .tab-content {
   min-height: 400px;
+  padding: 16px 0;
 
   .loading-state {
     padding: 48px;
     text-align: center;
-    color: #666;
+    color: #ba68c8;
   }
 
   .empty-state {
     padding: 64px 24px;
     text-align: center;
-    color: #666;
+    color: #ba68c8;
 
     mat-icon {
       font-size: 64px;
@@ -62,12 +68,32 @@
       height: 64px;
       margin-bottom: 16px;
       opacity: 0.5;
-      color: #00bcff;
+      color: #9c27b0;
     }
 
     p {
       margin: 0 0 24px 0;
       font-size: 16px;
+    }
+
+    .wizard-button {
+      background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+      color: #fff;
+      border: 1px solid rgba(255, 193, 7, 0.3);
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4), inset 0 0 10px rgba(255, 193, 7, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);
+        box-shadow: 0 6px 25px rgba(156, 39, 176, 0.6), 0 0 30px rgba(255, 193, 7, 0.3),
+          inset 0 0 15px rgba(255, 193, 7, 0.2);
+        transform: translateY(-2px);
+      }
     }
   }
 }
@@ -76,18 +102,34 @@
   padding: 0;
 }
 
+::ng-deep .mat-mdc-list-item {
+  height: auto !important;
+  padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-list-item .mdc-list-item__content {
+  padding: 0 !important;
+}
+
 .user-item {
-  padding: 16px 24px;
-  border-bottom: 1px solid rgba(0, 188, 255, 0.1);
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 8px;
   transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), rgba(186, 104, 200, 0.05));
+  border: 1px solid rgba(186, 104, 200, 0.2);
+  backdrop-filter: blur(10px);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   &:hover {
-    background: rgba(0, 188, 255, 0.05);
-    border-left: 3px solid #00bcff;
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(186, 104, 200, 0.1));
+    border-left: 3px solid #9c27b0;
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.2), 0 0 30px rgba(255, 213, 79, 0.1);
+    transform: translateY(-1px);
   }
 
   .user-info {
@@ -95,14 +137,16 @@
     align-items: center;
     gap: 16px;
     flex: 1;
+    min-width: 0; /* Allow text to wrap */
+    cursor: pointer;
 
     .avatar {
       width: 56px;
       height: 56px;
       border-radius: 50%;
       overflow: hidden;
-      background: rgba(0, 188, 255, 0.1);
-      border: 2px solid rgba(0, 188, 255, 0.3);
+      background: rgba(156, 39, 176, 0.1);
+      border: 2px solid rgba(156, 39, 176, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -115,7 +159,7 @@
       }
 
       mat-icon {
-        color: #00bcff;
+        color: #9c27b0;
         font-size: 40px;
         width: 40px;
         height: 40px;
@@ -126,25 +170,20 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+      flex: 1;
+      min-width: 0;
 
       .username {
         font-size: 16px;
         font-weight: 500;
+        color: #ffd54f;
+        text-shadow: 0 0 6px rgba(255, 213, 79, 0.3);
       }
 
       .subscribed-date {
         font-size: 13px;
-        color: #999;
+        color: #ba68c8;
       }
-    }
-  }
-
-  button {
-    color: #00bcff;
-    transition: transform 0.2s ease;
-
-    &:hover {
-      transform: translateX(4px);
     }
   }
 }
@@ -159,7 +198,11 @@
   }
 
   .user-item {
+    padding: 16px 16px;
+
     .user-info {
+      gap: 12px;
+
       .avatar {
         width: 48px;
         height: 48px;
@@ -168,6 +211,16 @@
           font-size: 32px;
           width: 32px;
           height: 32px;
+        }
+      }
+
+      .user-details {
+        .username {
+          font-size: 15px;
+        }
+
+        .subscribed-date {
+          font-size: 12px;
         }
       }
     }

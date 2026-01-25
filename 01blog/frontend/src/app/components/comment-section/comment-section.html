@@ -52,7 +52,7 @@
           </div>
           <div class="user-details">
             <span class="username">{{ comment.username }}</span>
-            <span class="timestamp">{{ getTimeAgo(comment.createdAt) }}</span>
+            <span class="timestamp">{{ comment.createdAt | timeAgo }}</span>
             <span *ngIf="comment.createdAt !== comment.updatedAt" class="edited">(edited)</span>
           </div>
         </div>

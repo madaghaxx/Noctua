@@ -20,4 +20,5 @@ public class SubscriptionResponse {
     private String subscribedToUsername;
     private String subscribedToAvatar;
     private LocalDateTime createdAt;
+    private boolean subscribed;
 }

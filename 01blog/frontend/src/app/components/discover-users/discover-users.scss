@@ -1,0 +1,169 @@
+.discover-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px;
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #f5c16c, #ffdd9a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .discover-card {
+    padding: 24px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(6px);
+
+    .search-section {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+
+      .search-field {
+        width: 100%;
+        max-width: 480px;
+      }
+    }
+
+    .users-section {
+      margin-top: 16px;
+
+      .loading-state {
+        text-align: center;
+        padding: 48px 0;
+
+        p {
+          margin-top: 12px;
+          opacity: 0.7;
+        }
+      }
+
+      .users-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+        margin-top: 32px;
+      }
+
+      .user-card {
+        border-radius: 18px;
+        cursor: pointer;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+        &:hover {
+          transform: translateY(-6px) scale(1.01);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        mat-card-header {
+          position: relative;
+          padding-bottom: 8px;
+        }
+
+        .user-avatar {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+          background-color: var(--mat-sys-surface-variant);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+          mat-icon {
+            font-size: 34px;
+            color: var(--mat-sys-on-surface-variant);
+          }
+        }
+
+        .username {
+          font-weight: 700;
+          font-size: 1.1rem;
+        }
+
+        .user-role {
+          font-size: 0.85rem;
+          opacity: 0.6;
+        }
+
+        .subscription-signal {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.75rem;
+          opacity: 0.85;
+
+          mat-icon {
+            font-size: 18px;
+
+            &.subscribed {
+              color: #4caf50;
+            }
+
+            &.not-subscribed {
+              color: #ff9800;
+            }
+          }
+        }
+
+        mat-card-content {
+          padding-top: 8px;
+
+          .join-date {
+            font-size: 0.8rem;
+            opacity: 0.7;
+          }
+        }
+
+        mat-card-actions {
+          display: flex;
+          justify-content: space-between;
+          padding: 16px;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+          button {
+            flex: 1;
+            gap: 6px;
+
+            &:first-child {
+              margin-right: 8px;
+            }
+          }
+        }
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 72px 20px;
+        opacity: 0.8;
+
+        .empty-icon {
+          font-size: 72px;
+          margin-bottom: 16px;
+        }
+
+        h3 {
+          margin-bottom: 6px;
+          font-weight: 600;
+        }
+
+        p {
+          font-size: 0.9rem;
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+}

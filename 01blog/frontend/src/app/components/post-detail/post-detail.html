@@ -1,3 +1,5 @@
+<app-shared-header></app-shared-header>
+
 <div class="post-detail-container" *ngIf="!loading() && post()">
   <div class="post-header">
     <button mat-icon-button (click)="goBack()" class="back-btn">
@@ -29,13 +31,17 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #postMenu="matMenu">
-        <button mat-menu-item (click)="editPost()">
+        <button mat-menu-item (click)="editPost()" *ngIf="canEdit()">
           <mat-icon>edit</mat-icon>
           <span>Edit Post</span>
         </button>
-        <button mat-menu-item (click)="deletePost()">
+        <button mat-menu-item (click)="deletePost()" *ngIf="canEdit()">
           <mat-icon>delete</mat-icon>
           <span>Delete Post</span>
+        </button>
+        <button mat-menu-item (click)="openReportDialog()" *ngIf="currentUserId() && !canEdit()">
+          <mat-icon>flag</mat-icon>
+          <span>Report</span>
         </button>
       </mat-menu>
     </mat-card-header>
@@ -97,6 +103,15 @@
         <button mat-button (click)="toggleLike()" [class.liked]="isLiked()" class="like-btn">
           <mat-icon>{{ isLiked() ? 'favorite' : 'favorite_border' }}</mat-icon>
           <span>{{ post()?.likeCount || 0 }} Likes</span>
+        </button>
+        <button
+          mat-button
+          (click)="openReportDialog()"
+          *ngIf="currentUserId() && !canEdit()"
+          class="report-btn"
+        >
+          <mat-icon>flag</mat-icon>
+          <span>Report</span>
         </button>
         <div class="stat">
           <mat-icon>comment</mat-icon>

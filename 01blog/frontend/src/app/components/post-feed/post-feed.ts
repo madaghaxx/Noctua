@@ -192,18 +192,6 @@ export class PostFeedComponent implements OnInit {
     return this.likedPosts().has(postId);
   }
 
-  getTimeAgo(date: string): string {
-    const now = new Date().getTime();
-    const past = new Date(date).getTime();
-    const diff = Math.floor((now - past) / 1000);
-
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-    if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
-    return new Date(date).toLocaleDateString();
-  }
-
   isVideo(url: string): boolean {
     return ['.mp4', '.webm', '.ogg', '.avi', '.mov', '.wmv', '.flv', '.mkv'].some((ext) =>
       url.toLowerCase().includes(ext)

@@ -1,7 +1,9 @@
-<div class="subscriptions-container">
-  <h1 class="page-title volt-glow-text">Subscriptions</h1>
+<app-shared-header></app-shared-header>
 
-  <mat-card class="subscriptions-card volt-glow">
+<div class="subscriptions-container">
+  <h1 class="page-title enchanted-gold">Subscriptions</h1>
+
+  <mat-card class="subscriptions-card wizard-card">
     <mat-tab-group animationDuration="300ms" color="primary">
       <mat-tab>
         <ng-template mat-tab-label>
@@ -17,11 +19,13 @@
           <div *ngIf="!loadingSubscriptions && subscriptions.length === 0" class="empty-state">
             <mat-icon>people_outline</mat-icon>
             <p>You're not following anyone yet</p>
-            <button mat-raised-button color="primary" routerLink="/home">Discover users</button>
+            <button mat-raised-button routerLink="/discover" class="wizard-button">
+              Discover users
+            </button>
           </div>
 
           <mat-list *ngIf="!loadingSubscriptions && subscriptions.length > 0">
-            <mat-list-item *ngFor="let sub of subscriptions" class="user-item volt-glow">
+            <mat-list-item *ngFor="let sub of subscriptions" class="user-item">
               <div class="user-info" (click)="viewProfile(sub.subscribedToId)">
                 <div class="avatar">
                   <img
@@ -32,13 +36,10 @@
                   <mat-icon *ngIf="!sub.subscribedToAvatar">account_circle</mat-icon>
                 </div>
                 <div class="user-details">
-                  <span class="username gold-accent">{{ sub.subscribedToUsername }}</span>
-                  <span class="subscribed-date">Subscribed {{ getTimeAgo(sub.createdAt) }}</span>
+                  <span class="username enchanted-gold">{{ sub.subscribedToUsername }}</span>
+                  <span class="subscribed-date">Subscribed {{ sub.createdAt | timeAgo }}</span>
                 </div>
               </div>
-              <button mat-icon-button (click)="viewProfile(sub.subscribedToId)">
-                <mat-icon>arrow_forward</mat-icon>
-              </button>
             </mat-list-item>
           </mat-list>
         </div>
@@ -61,19 +62,16 @@
           </div>
 
           <mat-list *ngIf="!loadingSubscribers && subscribers.length > 0">
-            <mat-list-item *ngFor="let sub of subscribers" class="user-item volt-glow">
+            <mat-list-item *ngFor="let sub of subscribers" class="user-item">
               <div class="user-info" (click)="viewProfile(sub.subscriberId)">
                 <div class="avatar">
                   <mat-icon>account_circle</mat-icon>
                 </div>
                 <div class="user-details">
-                  <span class="username gold-accent">{{ sub.subscriberUsername }}</span>
-                  <span class="subscribed-date">Followed {{ getTimeAgo(sub.createdAt) }}</span>
+                  <span class="username enchanted-gold">{{ sub.subscriberUsername }}</span>
+                  <span class="subscribed-date">Followed {{ sub.createdAt | timeAgo }}</span>
                 </div>
               </div>
-              <button mat-icon-button (click)="viewProfile(sub.subscriberId)">
-                <mat-icon>arrow_forward</mat-icon>
-              </button>
             </mat-list-item>
           </mat-list>
         </div>

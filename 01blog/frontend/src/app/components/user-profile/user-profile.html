@@ -1,55 +1,123 @@
+<app-shared-header></app-shared-header>
+
 <div class="profile-container">
-  <mat-card class="profile-header volt-glow">
-    <div class="cover-image"></div>
+  <div class="content">
+    <div style="display: flex; justify-content: center">
+      <div style="flex: 0 0 70%; max-width: 70%; min-width: 340px">
+        <mat-card class="profile-header wizard-card">
+          <div class="cover-image"></div>
 
-    <div class="profile-info">
-      <div class="avatar-section">
-        <div class="avatar">
-          <mat-icon>account_circle</mat-icon>
-        </div>
-      </div>
+          <div class="profile-navigation">
+            <button mat-raised-button (click)="navigateToHome()" class="home-btn wizard-button">
+              <mat-icon>home</mat-icon>
+              Home
+            </button>
+          </div>
 
-      <div class="user-details">
-        <h1 class="username gold-accent">Username</h1>
-        <p class="user-stats">
-          <span class="stat">
-            <strong class="volt-text">{{ subscriberCount }}</strong> subscribers
-          </span>
-          <span class="stat">
-            <strong class="volt-text">{{ subscriptionCount }}</strong> subscriptions
-          </span>
-        </p>
-      </div>
+          <div class="profile-info">
+            <div class="avatar-section">
+              <div class="avatar">
+                <mat-icon>account_circle</mat-icon>
+              </div>
+            </div>
 
-      <div class="profile-actions" *ngIf="!isOwnProfile">
-        <button
-          mat-raised-button
-          [color]="isSubscribed ? 'accent' : 'primary'"
-          (click)="toggleSubscription()"
-          [disabled]="loading"
-          class="subscribe-btn volt-glow"
-        >
-          <mat-icon>{{ isSubscribed ? 'check' : 'person_add' }}</mat-icon>
-          {{ isSubscribed ? 'Subscribed' : 'Subscribe' }}
-        </button>
+            <div class="user-details">
+              <h1 class="username enchanted-gold">{{ user()?.username || 'Loading...' }}</h1>
+              <p class="user-stats">
+                <span class="stat">
+                  <strong class="enchanted-gold">{{ subscriberCount() }}</strong> subscribers
+                </span>
+                <span class="stat">
+                  <strong class="enchanted-gold">{{ subscriptionCount() }}</strong> subscriptions
+                </span>
+                <span class="stat">
+                  <strong class="enchanted-gold">{{ comments().length }}</strong> comments
+                </span>
+              </p>
+            </div>
+
+            <div class="profile-actions" *ngIf="!isOwnProfile()">
+              <button
+                mat-raised-button
+                [color]="isSubscribed() ? 'accent' : 'primary'"
+                (click)="toggleSubscription()"
+                [disabled]="loading()"
+                class="subscribe-btn wizard-button"
+              >
+                <mat-icon>{{ isSubscribed() ? 'check' : 'person_add' }}</mat-icon>
+                {{ isSubscribed() ? 'Subscribed' : 'Subscribe' }}
+              </button>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="profile-content wizard-card">
+          <mat-tab-group animationDuration="300ms" color="primary">
+            <mat-tab label="Posts">
+              <div class="tab-content">
+                @if (posts().length > 0) {
+                <div class="posts-list">
+                  @for (post of posts(); track post.id) {
+                  <mat-card class="post-card" [routerLink]="['/post', post.id]">
+                    <mat-card-header>
+                      <mat-card-title>{{ post.title }}</mat-card-title>
+                      <mat-card-subtitle>{{ post.createdAt | date : 'short' }}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <p class="post-excerpt">{{ post.content.substring(0, 200) }}...</p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-button>
+                        <mat-icon>thumb_up</mat-icon>
+                        {{ post.likeCount || 0 }}
+                      </button>
+                      <button mat-button>
+                        <mat-icon>comment</mat-icon>
+                        {{ post.commentCount || 0 }}
+                      </button>
+                    </mat-card-actions>
+                  </mat-card>
+                  }
+                </div>
+                } @else {
+                <p class="empty-message">No posts yet</p>
+                }
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Comments">
+              <div class="tab-content">
+                @if (comments().length > 0) {
+                <div class="comments-list">
+                  @for (comment of comments(); track comment.id) {
+                  <mat-card class="comment-card">
+                    <mat-card-content>
+                      <p class="comment-content">{{ comment.content }}</p>
+                      <div class="comment-meta">
+                        <span class="post-link"
+                          >On post: <a [routerLink]="['/post', comment.postId]">View Post</a></span
+                        >
+                        <span class="comment-date">{{ comment.createdAt | date : 'short' }}</span>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                  }
+                </div>
+                } @else {
+                <p class="empty-message">No comments yet</p>
+                }
+              </div>
+            </mat-tab>
+
+            <mat-tab label="About">
+              <div class="tab-content">
+                <h3 class="enchanted-gold">About</h3>
+                <p>User bio and information will appear here</p>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card>
       </div>
     </div>
-  </mat-card>
-
-  <mat-card class="profile-content volt-glow">
-    <mat-tab-group animationDuration="300ms" color="primary">
-      <mat-tab label="Posts">
-        <div class="tab-content">
-          <p class="empty-message">Posts will appear here</p>
-        </div>
-      </mat-tab>
-
-      <mat-tab label="About">
-        <div class="tab-content">
-          <h3 class="volt-text">About</h3>
-          <p>User bio and information will appear here</p>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-card>
+  </div>
 </div>

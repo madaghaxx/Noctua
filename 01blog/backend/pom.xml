@@ -21,6 +21,7 @@
     <properties>
         <java.version>17</java.version>
         <jjwt.version>0.12.3</jjwt.version>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <dependencies>
@@ -112,6 +113,15 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <showWarnings>false</showWarnings>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

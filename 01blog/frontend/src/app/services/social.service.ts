@@ -56,4 +56,15 @@ export class SocialService {
   deleteComment(postId: string, commentId: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/posts/${postId}/comments/${commentId}`);
   }
+
+  getUserComments(
+    userId: string,
+    page: number = 0,
+    size: number = 20
+  ): Observable<PageResponse<CommentResponse>> {
+    const params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+    return this.http.get<PageResponse<CommentResponse>>(`${this.API_URL}/comments/user/${userId}`, {
+      params,
+    });
+  }
 }

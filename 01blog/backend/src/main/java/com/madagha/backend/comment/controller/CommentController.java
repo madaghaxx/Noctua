@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/posts/{postId}/comments")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping
+    @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<CommentResponse> createComment(
             @PathVariable UUID postId,
             @Valid @RequestBody CommentRequest request,
@@ -33,7 +33,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping
+    @GetMapping("/posts/{postId}/comments")
     public ResponseEntity<Page<CommentResponse>> getComments(
             @PathVariable UUID postId,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -41,7 +41,15 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @PutMapping("/{commentId}")
+    @GetMapping("/comments/user/{userId}")
+    public ResponseEntity<Page<CommentResponse>> getUserComments(
+            @PathVariable UUID userId,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<CommentResponse> comments = commentService.getCommentsByUser(userId, pageable);
+        return ResponseEntity.ok(comments);
+    }
+
+    @PutMapping("/posts/{postId}/comments/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(
             @PathVariable UUID postId,
             @PathVariable UUID commentId,
@@ -51,7 +59,7 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("/posts/{postId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable UUID postId,
             @PathVariable UUID commentId,

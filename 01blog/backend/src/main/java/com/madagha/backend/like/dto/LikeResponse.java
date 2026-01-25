@@ -18,4 +18,5 @@ public class LikeResponse {
     private String username;
     private UUID postId;
     private LocalDateTime createdAt;
+    private boolean liked; // true if liked, false if unliked
 }

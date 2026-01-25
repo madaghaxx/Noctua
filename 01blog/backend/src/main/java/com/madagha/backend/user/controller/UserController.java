@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,9 +32,9 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(user));
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<ApiResponse<UserDto>> getUserByUsername(@PathVariable String username) {
-        UserDto user = userService.getUserByUsername(username);
-        return ResponseEntity.ok(ApiResponse.success(user));
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<UserDto>>> getAllUsers() {
+        List<UserDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(ApiResponse.success(users));
     }
 }

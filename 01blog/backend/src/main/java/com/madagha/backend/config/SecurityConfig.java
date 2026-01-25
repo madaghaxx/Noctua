@@ -38,6 +38,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/media/**").permitAll()
+                        .requestMatchers("/api/posts/**").permitAll()
+                        .requestMatchers("/api/comments/user/**").permitAll()
+                        .requestMatchers("/api/subscriptions/status/**").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
