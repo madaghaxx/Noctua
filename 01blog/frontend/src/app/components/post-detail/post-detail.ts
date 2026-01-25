@@ -73,7 +73,7 @@ export class PostDetailComponent implements OnInit {
       if (result) {
         this.reportService
           .createReport({
-            postId: post.id,
+            reportedUserId: post.owner.id,
             reason: result.reason,
             details: result.details,
           })
@@ -148,23 +148,21 @@ export class PostDetailComponent implements OnInit {
   toggleLike() {
     const post = this.post();
     if (!post) return;
+    const wasLiked = this.isLiked();
     this.socialService.toggleLike(post.id).subscribe({
       next: (response) => {
-        this.isLiked.set(response.liked);
+        // optimistic update: assume toggle succeeded
+        this.isLiked.set(!wasLiked);
         const currentPost = this.post();
         if (currentPost) {
-          if (response.liked) {
-            this.post.set({
-              ...currentPost,
-              likeCount: (currentPost.likeCount || 0) + 1,
-            });
-          } else {
-            this.post.set({
-              ...currentPost,
-              likeCount: Math.max((currentPost.likeCount || 0) - 1, 0),
-            });
-          }
+          this.post.set({
+            ...currentPost,
+            likeCount: wasLiked
+              ? Math.max((currentPost.likeCount || 0) - 1, 0)
+              : (currentPost.likeCount || 0) + 1,
+          });
         }
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error toggling like:', error);
@@ -184,7 +182,7 @@ export class PostDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(PostDialogComponent, {
       width: '800px',
       maxHeight: '90vh',
-      data: { post: this.post },
+      data: { post: this.post() },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

@@ -119,6 +119,11 @@ export class PostFeedComponent implements OnInit {
     this.router.navigate(['/post', postId]);
   }
 
+  navigateToDiscover(event?: Event) {
+    if (event) event.stopPropagation();
+    this.router.navigate(['/discover']);
+  }
+
   canEdit(post: Post): boolean {
     return this.currentUserId() === post.owner.id;
   }
@@ -157,30 +162,32 @@ export class PostFeedComponent implements OnInit {
 
   toggleLike(postId: string, event: Event) {
     event.stopPropagation();
+    const wasLiked = this.isLiked(postId);
     this.socialService.toggleLike(postId).subscribe({
       next: (response) => {
-        // update likedPosts set immutably
-        if (response.liked) {
-          this.likedPosts.set(new Set([...this.likedPosts(), postId]));
-        } else {
+        // optimistic update: assume toggle succeeded
+        if (wasLiked) {
           const newSet = new Set(this.likedPosts());
           newSet.delete(postId);
           this.likedPosts.set(newSet);
+        } else {
+          this.likedPosts.set(new Set([...this.likedPosts(), postId]));
         }
 
-        // update posts signal immutably
+        // update posts signal immutably: decrement if was liked, increment if wasn't
         this.posts.set(
           this.posts().map((p) =>
             p.id === postId
               ? {
                   ...p,
-                  likeCount: response.liked
-                    ? (p.likeCount || 0) + 1
-                    : Math.max((p.likeCount || 0) - 1, 0),
+                  likeCount: wasLiked
+                    ? Math.max((p.likeCount || 0) - 1, 0)
+                    : (p.likeCount || 0) + 1,
                 }
               : p
           )
         );
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error toggling like:', error);

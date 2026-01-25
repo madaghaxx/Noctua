@@ -19,6 +19,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, UUID
 
     Page<Subscription> findBySubscriber(User subscriber, Pageable pageable);
 
+    java.util.List<Subscription> findBySubscriber(User subscriber);
+
     Page<Subscription> findBySubscribedTo(User subscribedTo, Pageable pageable);
 
     long countBySubscribedTo(User subscribedTo);

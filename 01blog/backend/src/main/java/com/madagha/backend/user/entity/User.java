@@ -76,13 +76,13 @@ public class User implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
+    public boolean isAccountNonLocked() {
+        return status == UserStatus.ACTIVE;
     }
 
     @Override
-    public boolean isAccountNonLocked() {
-        return status == UserStatus.ACTIVE;
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override

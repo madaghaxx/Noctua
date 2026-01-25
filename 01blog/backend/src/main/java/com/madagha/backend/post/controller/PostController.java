@@ -57,8 +57,17 @@ public class PostController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<PostDto>>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<PostDto> posts = postService.getAllPosts(page, size);
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            // If unauthenticated, return empty page (no posts)
+            org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page,
+                    size);
+            org.springframework.data.domain.Page<PostDto> empty = org.springframework.data.domain.Page.empty(pageable);
+            return ResponseEntity.ok(ApiResponse.success(empty));
+        }
+
+        Page<PostDto> posts = postService.getFeedForUser(userDetails.getUsername(), page, size);
         return ResponseEntity.ok(ApiResponse.success(posts));
     }
 

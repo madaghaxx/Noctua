@@ -14,9 +14,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<User[]> {
-    return this.http
-      .get<ApiResponse<User[]>>(this.apiUrl)
-      .pipe(map((response) => response.data));
+    return this.http.get<ApiResponse<User[]>>(this.apiUrl).pipe(map((response) => response.data));
   }
 
   getUserById(id: string): Observable<User> {

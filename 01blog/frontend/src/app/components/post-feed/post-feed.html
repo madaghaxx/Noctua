@@ -90,9 +90,28 @@
 
   <div class="empty-state" *ngIf="!loading() && posts().length === 0">
     <mat-icon>article</mat-icon>
-    <h3>No posts yet</h3>
-    <p>Be the first to create a post!</p>
-    <button mat-raised-button color="primary" (click)="openCreateDialog()">Create Post</button>
+    <h3 *ngIf="currentUserId()">Your feed is empty</h3>
+    <h3 *ngIf="!currentUserId()">No posts yet</h3>
+
+    <p *ngIf="currentUserId()">Discover users to follow and fill your feed with great posts.</p>
+    <p *ngIf="!currentUserId()">Be the first to create a post!</p>
+
+    <div class="empty-actions">
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="navigateToDiscover($event)"
+        *ngIf="currentUserId()"
+      >
+        <mat-icon>person_search</mat-icon>
+        Discover Users
+      </button>
+
+      <button mat-raised-button color="primary" (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Create Post
+      </button>
+    </div>
   </div>
 
   <div class="load-more" *ngIf="!loading() && page() < totalPages() - 1">

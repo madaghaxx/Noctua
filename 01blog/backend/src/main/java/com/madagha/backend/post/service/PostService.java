@@ -10,6 +10,7 @@ import com.madagha.backend.post.dto.CreatePostRequest;
 import com.madagha.backend.post.dto.PostDto;
 import com.madagha.backend.post.entity.Post;
 import com.madagha.backend.post.repository.PostRepository;
+import com.madagha.backend.subscription.repository.SubscriptionRepository;
 import com.madagha.backend.user.dto.UserDto;
 import com.madagha.backend.user.entity.User;
 import com.madagha.backend.user.service.UserService;
@@ -33,6 +34,7 @@ public class PostService {
         private final LikeRepository likeRepository;
         private final CommentRepository commentRepository;
         private final UserService userService;
+        private final SubscriptionRepository subscriptionRepository;
 
         @Transactional
         public PostDto createPost(CreatePostRequest request, String username) {
@@ -111,6 +113,23 @@ public class PostService {
                 Page<Post> posts = postRepository.findByOwnerIdOrderByCreatedAtDesc(userId, pageable);
 
                 // Fetch all media in one query to avoid N+1 problem
+                List<UUID> postIds = posts.getContent().stream()
+                                .map(Post::getId)
+                                .collect(Collectors.toList());
+
+                List<Media> allMedia = postIds.isEmpty() ? List.of() : mediaRepository.findByPostIdIn(postIds);
+
+                return posts.map(post -> mapToDto(post, allMedia));
+        }
+
+        public Page<PostDto> getFeedForUser(String username, int page, int size) {
+                User user = userService.getCurrentUser(username);
+
+                // fetch subscriptions (users the current user follows)
+                Pageable pageable = PageRequest.of(page, size);
+
+                Page<Post> posts = postRepository.findPostsForSubscriber(user, pageable);
+
                 List<UUID> postIds = posts.getContent().stream()
                                 .map(Post::getId)
                                 .collect(Collectors.toList());

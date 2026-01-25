@@ -67,24 +67,8 @@ public class AdminService {
     public void deleteUser(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Delete all user's posts and related data
-        List<Post> userPosts = postRepository.findByOwnerId(userId);
-        for (Post post : userPosts) {
-            // Delete likes and comments for each post
-            likeRepository.deleteByPostId(post.getId());
-            commentRepository.deleteByPostId(post.getId());
-        }
-        postRepository.deleteByOwnerId(userId);
-
-        // Delete user's likes and comments
-        likeRepository.deleteByUserId(userId);
-        commentRepository.deleteByUserId(userId);
-
-        // Delete user's reports
-        reportRepository.deleteByReportedUserId(userId);
-
-        userRepository.delete(user);
+        user.setStatus(UserStatus.DELETED);
+        userRepository.save(user);
     }
 
     // Post Moderation

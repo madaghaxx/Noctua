@@ -18,9 +18,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error) => {
-      if (error.status === 403) {
-        // Token expired or invalid, logout user
-        authService.logout('Your session has expired. Please log in again.');
+      if (error.status === 401 || error.status === 403) {
+        // Token expired, invalid, or user banned/deleted, logout user
+        authService.logout('Your session has expired or access is denied. Please log in again.');
       }
       return throwError(() => error);
     })

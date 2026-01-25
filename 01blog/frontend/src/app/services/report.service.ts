@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface CreateReportRequest {
-  postId: string;
+  reportedUserId: string;
   reason: string;
   details?: string;
 }
