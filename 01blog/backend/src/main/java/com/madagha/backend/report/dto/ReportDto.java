@@ -17,6 +17,7 @@ public class ReportDto {
     private UUID id;
     private UserSummaryDto reporter;
     private UserSummaryDto reportedUser;
+    private UUID reportedPostId;
     private String reason;
     private ReportStatus status;
     private LocalDateTime createdAt;

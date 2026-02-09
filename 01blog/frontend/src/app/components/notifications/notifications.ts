@@ -88,6 +88,8 @@ export class NotificationsComponent implements OnInit {
     // Navigate based on notification type
     if (notification.type === 'LIKE' || notification.type === 'COMMENT') {
       this.router.navigate(['/post', notification.referenceId]);
+    } else if (notification.type === 'POST') {
+      this.router.navigate(['/post', notification.referenceId]);
     } else if (notification.type === 'SUBSCRIPTION') {
       this.router.navigate(['/profile', notification.referenceId]);
     }
@@ -115,6 +117,8 @@ export class NotificationsComponent implements OnInit {
         return 'comment';
       case 'SUBSCRIPTION':
         return 'person_add';
+      case 'POST':
+        return 'article';
       case 'MENTION':
         return 'alternate_email';
       default:

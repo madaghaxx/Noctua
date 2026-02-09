@@ -4,13 +4,15 @@ import com.madagha.backend.admin.dto.PostAdminDto;
 import com.madagha.backend.admin.dto.UserAdminDto;
 import com.madagha.backend.comment.repository.CommentRepository;
 import com.madagha.backend.like.repository.LikeRepository;
+import com.madagha.backend.media.repository.MediaRepository;
+import com.madagha.backend.notification.repository.NotificationRepository;
 import com.madagha.backend.post.entity.Post;
 import com.madagha.backend.post.repository.PostRepository;
 import com.madagha.backend.report.dto.ReportDto;
 import com.madagha.backend.report.entity.Report;
 import com.madagha.backend.report.entity.ReportStatus;
 import com.madagha.backend.report.repository.ReportRepository;
-import com.madagha.backend.user.entity.Role;
+import com.madagha.backend.subscription.repository.SubscriptionRepository;
 import com.madagha.backend.user.entity.User;
 import com.madagha.backend.user.entity.UserStatus;
 import com.madagha.backend.user.repository.UserRepository;
@@ -34,6 +36,9 @@ public class AdminService {
     private final ReportRepository reportRepository;
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
+    private final MediaRepository mediaRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final NotificationRepository notificationRepository;
 
     // User Management
     public Page<UserAdminDto> getAllUsers(Pageable pageable) {
@@ -67,8 +72,35 @@ public class AdminService {
     public void deleteUser(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setStatus(UserStatus.DELETED);
-        userRepository.save(user);
+
+        List<Post> userPosts = postRepository.findByOwnerId(userId);
+
+        // Remove child records for user's posts
+        userPosts.forEach(post -> {
+            UUID postId = post.getId();
+            mediaRepository.deleteByPostId(postId);
+            likeRepository.deleteByPostId(postId);
+            commentRepository.deleteByPostId(postId);
+        });
+
+        // Delete posts after cleanup
+        postRepository.deleteAll(userPosts);
+
+        // Remove user interactions on other posts
+        likeRepository.deleteByUserId(userId);
+        commentRepository.deleteByUserId(userId);
+
+        // Remove subscriptions and notifications
+        subscriptionRepository.deleteBySubscriberId(userId);
+        subscriptionRepository.deleteBySubscribedToId(userId);
+        notificationRepository.deleteByUserId(userId);
+
+        // Remove reports tied to this user
+        reportRepository.deleteByReportedUserId(userId);
+        reportRepository.deleteByReporterId(userId);
+
+        // Finally delete the user
+        userRepository.delete(user);
     }
 
     // Post Moderation
@@ -82,7 +114,8 @@ public class AdminService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        // Delete likes and comments for the post
+        // Delete associated media, likes, and comments for the post
+        mediaRepository.deleteByPostId(postId);
         likeRepository.deleteByPostId(postId);
         commentRepository.deleteByPostId(postId);
 
@@ -194,6 +227,7 @@ public class AdminService {
                         .username(report.getReportedUser().getUsername())
                         .avatar(report.getReportedUser().getAvatar())
                         .build())
+                .reportedPostId(report.getReportedPostId())
                 .reason(report.getReason())
                 .status(report.getStatus())
                 .createdAt(report.getCreatedAt())

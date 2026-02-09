@@ -32,6 +32,12 @@ public class LikeService {
 
         if (existingLike.isPresent()) {
             likeRepository.delete(existingLike.get());
+            if (!post.getOwner().getId().equals(user.getId())) {
+                notificationService.deleteLatestNotification(
+                        post.getOwner(),
+                        Notification.NotificationType.LIKE,
+                        postId);
+            }
             // Return response indicating the post is no longer liked
             return LikeResponse.builder()
                     .userId(user.getId())

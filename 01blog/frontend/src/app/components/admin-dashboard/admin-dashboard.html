@@ -322,10 +322,16 @@
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let report">
                   <div class="report-actions" *ngIf="report.status === 'PENDING'">
-                    <button mat-stroked-button color="primary" (click)="resolveReport(report.id)">
-                      Resolve
+                    <button mat-raised-button color="primary" (click)="showReportedPost(report)">
+                      Show Post
                     </button>
-                    <button mat-stroked-button (click)="dismissReport(report.id)">Dismiss</button>
+                    <button mat-raised-button color="warn" (click)="deleteReportedPost(report)">
+                      Delete Post
+                    </button>
+                    <button mat-raised-button color="accent" (click)="blockReportedUser(report)">
+                      Block Owner
+                    </button>
+                    <button mat-raised-button (click)="dismissReport(report.id)">Dismiss</button>
                   </div>
                   <span *ngIf="report.status !== 'PENDING'">-</span>
                 </td>

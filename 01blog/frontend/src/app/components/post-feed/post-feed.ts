@@ -7,12 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PostService } from '../../services/post.service';
 import { SocialService } from '../../services/social.service';
 import { Post } from '../../models/post.model';
 import { PostDialogComponent } from '../post-dialog/post-dialog';
 import { AuthService } from '../../services/auth.service';
 import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-post-feed',
@@ -25,6 +27,7 @@ import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatMenuModule,
+    MatSnackBarModule,
     TimeAgoPipe,
   ],
   templateUrl: './post-feed.html',
@@ -44,6 +47,7 @@ export class PostFeedComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -147,17 +151,29 @@ export class PostFeedComponent implements OnInit {
 
   deletePost(postId: string, event: Event) {
     event.stopPropagation();
-    if (confirm('Are you sure you want to delete this post?')) {
-      this.postService.deletePost(postId).subscribe({
-        next: () => {
-          this.posts.set(this.posts().filter((p) => p.id !== postId));
-        },
-        error: (error) => {
-          console.error('Error deleting post:', error);
-          alert('Failed to delete post');
-        },
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Delete post',
+        message: 'Are you sure you want to delete this post? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.postService.deletePost(postId).subscribe({
+          next: () => {
+            this.posts.set(this.posts().filter((p) => p.id !== postId));
+          },
+          error: (error) => {
+            console.error('Error deleting post:', error);
+            this.snackBar.open('Failed to delete post', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
   toggleLike(postId: string, event: Event) {

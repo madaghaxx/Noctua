@@ -3,6 +3,7 @@ package com.madagha.backend.auth.service;
 import com.madagha.backend.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.jackson.io.JacksonDeserializer;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,10 +72,12 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    @SuppressWarnings("deprecation")
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
                 .verifyWith(getSignInKey())
+                .deserializeJsonWith(new JacksonDeserializer<>())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

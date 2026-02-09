@@ -10,6 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ReportDialogComponent } from '../report-dialog/report-dialog';
 import { ReportService } from '../../services/report.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PostService } from '../../services/post.service';
 import { SocialService } from '../../services/social.service';
 import { AuthService } from '../../services/auth.service';
@@ -19,6 +20,7 @@ import { PostDialogComponent } from '../post-dialog/post-dialog';
 import { Nl2brPipe } from '../../pipes/nl2br.pipe';
 import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
 import { SharedHeaderComponent } from '../shared-header/shared-header';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-post-detail',
@@ -32,6 +34,7 @@ import { SharedHeaderComponent } from '../shared-header/shared-header';
     MatDividerModule,
     MatDialogModule,
     MatMenuModule,
+    MatSnackBarModule,
     CommentSectionComponent,
     SharedHeaderComponent,
     Nl2brPipe,
@@ -60,29 +63,35 @@ export class PostDetailComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private snackBar: MatSnackBar
   ) {}
   openReportDialog() {
     const post = this.post();
     if (!post) return;
     const dialogRef = this.dialog.open(ReportDialogComponent, {
       width: '400px',
-      data: { postId: post.id },
+      data: { title: 'Report Post' },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.reportService
           .createReport({
             reportedUserId: post.owner.id,
+            reportedPostId: post.id,
             reason: result.reason,
             details: result.details,
           })
           .subscribe({
             next: () => {
-              alert('Report submitted successfully.');
+              this.snackBar.open('Report submitted successfully.', 'Close', {
+                duration: 3000,
+              });
             },
             error: () => {
-              alert('Failed to submit report.');
+              this.snackBar.open('Failed to submit report.', 'Close', {
+                duration: 3000,
+              });
             },
           });
       }
@@ -130,7 +139,7 @@ export class PostDetailComponent implements OnInit {
         console.error('Error loading post:', error);
         this.loading.set(false);
         this.cdr.detectChanges();
-        alert('Post not found');
+        this.snackBar.open('Post not found', 'Close', { duration: 2500 });
         this.router.navigate(['/']);
       },
     });
@@ -199,17 +208,29 @@ export class PostDetailComponent implements OnInit {
     const post = this.post();
     if (!post || !post.id) return;
 
-    if (confirm('Are you sure you want to delete this post?')) {
-      this.postService.deletePost(post.id).subscribe({
-        next: () => {
-          this.router.navigate(['/']);
-        },
-        error: (error) => {
-          console.error('Error deleting post:', error);
-          alert('Failed to delete post');
-        },
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Delete post',
+        message: 'Are you sure you want to delete this post? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.postService.deletePost(post.id).subscribe({
+          next: () => {
+            this.router.navigate(['/']);
+          },
+          error: (error) => {
+            console.error('Error deleting post:', error);
+            this.snackBar.open('Failed to delete post', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
   goBack() {

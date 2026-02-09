@@ -19,6 +19,8 @@ public class CreateReportRequest {
     @NotNull(message = "Reported user ID is required")
     private UUID reportedUserId;
 
+    private UUID reportedPostId;
+
     @NotBlank(message = "Reason is required")
     @Size(max = 500, message = "Reason must not exceed 500 characters")
     private String reason;

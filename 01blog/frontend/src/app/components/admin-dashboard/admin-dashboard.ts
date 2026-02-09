@@ -10,9 +10,11 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
+import { Router } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { AuthService } from '../../services/auth.service';
 import { SharedHeaderComponent } from '../shared-header/shared-header';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 
 interface Analytics {
   totalUsers: number;
@@ -66,6 +68,7 @@ interface Report {
     username: string;
     avatar?: string;
   };
+  reportedPostId?: string;
   reason: string;
   status: string;
   createdAt: string;
@@ -120,7 +123,8 @@ export class AdminDashboardComponent implements OnInit {
     private adminService: AdminService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -216,113 +220,233 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   banUser(userId: string) {
-    if (confirm('Are you sure you want to ban this user?')) {
-      this.adminService.banUser(userId).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBar.open('User banned successfully', 'Close', { duration: 3000 });
-            this.loadUsers(this.usersPage());
-          }
-        },
-        error: (error) => {
-          console.error('Error banning user:', error);
-          this.snackBar.open('Failed to ban user', 'Close', { duration: 3000 });
-        },
-      });
-    }
+    this.openConfirmDialog(
+      {
+        title: 'Ban user',
+        message: 'Are you sure you want to ban this user?',
+        confirmText: 'Ban',
+        cancelText: 'Cancel',
+      },
+      () => {
+        this.adminService.banUser(userId).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('User banned successfully', 'Close', { duration: 3000 });
+              this.loadUsers(this.usersPage());
+            }
+          },
+          error: (error) => {
+            console.error('Error banning user:', error);
+            this.snackBar.open('Failed to ban user', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    );
   }
 
   unbanUser(userId: string) {
-    if (confirm('Are you sure you want to unban this user?')) {
-      this.adminService.unbanUser(userId).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBar.open('User unbanned successfully', 'Close', { duration: 3000 });
-            this.loadUsers(this.usersPage());
-          }
-        },
-        error: (error) => {
-          console.error('Error unbanning user:', error);
-          this.snackBar.open('Failed to unban user', 'Close', { duration: 3000 });
-        },
-      });
-    }
+    this.openConfirmDialog(
+      {
+        title: 'Unban user',
+        message: 'Are you sure you want to unban this user?',
+        confirmText: 'Unban',
+        cancelText: 'Cancel',
+      },
+      () => {
+        this.adminService.unbanUser(userId).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('User unbanned successfully', 'Close', { duration: 3000 });
+              this.loadUsers(this.usersPage());
+            }
+          },
+          error: (error) => {
+            console.error('Error unbanning user:', error);
+            this.snackBar.open('Failed to unban user', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    );
   }
 
   deleteUser(userId: string) {
-    if (
-      confirm(
-        'Are you sure you want to permanently delete this user and all their content? This action cannot be undone.'
-      )
-    ) {
-      this.adminService.deleteUser(userId).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBar.open('User deleted successfully', 'Close', { duration: 3000 });
-            this.loadUsers(this.usersPage());
-            this.loadAnalytics();
-          }
-        },
-        error: (error) => {
-          console.error('Error deleting user:', error);
-          this.snackBar.open('Failed to delete user', 'Close', { duration: 3000 });
-        },
-      });
-    }
+    this.openConfirmDialog(
+      {
+        title: 'Delete user',
+        message:
+          'Are you sure you want to permanently delete this user and all their content? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+      () => {
+        this.adminService.deleteUser(userId).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('User deleted successfully', 'Close', { duration: 3000 });
+              this.loadUsers(this.usersPage());
+              this.loadAnalytics();
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting user:', error);
+            this.snackBar.open('Failed to delete user', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    );
   }
 
   deletePost(postId: string) {
-    if (confirm('Are you sure you want to delete this post?')) {
-      this.adminService.deletePost(postId).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBar.open('Post deleted successfully', 'Close', { duration: 3000 });
-            this.loadPosts(this.postsPage());
-            this.loadAnalytics();
-          }
-        },
-        error: (error) => {
-          console.error('Error deleting post:', error);
-          this.snackBar.open('Failed to delete post', 'Close', { duration: 3000 });
-        },
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Delete post',
+        message: 'Are you sure you want to delete this post? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.adminService.deletePost(postId).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Post deleted successfully', 'Close', { duration: 3000 });
+              this.loadPosts(this.postsPage());
+              this.loadAnalytics();
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting post:', error);
+            this.snackBar.open('Failed to delete post', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    });
   }
 
-  resolveReport(reportId: string) {
-    const adminNote = prompt('Enter admin note (optional):');
-    if (adminNote !== null) {
-      this.adminService.resolveReport(reportId, adminNote).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBar.open('Report resolved successfully', 'Close', { duration: 3000 });
-            this.loadReports();
-          }
-        },
-        error: (error) => {
-          console.error('Error resolving report:', error);
-          this.snackBar.open('Failed to resolve report', 'Close', { duration: 3000 });
-        },
+  deleteReportedPost(report: Report) {
+    if (!report.reportedPostId) {
+      this.snackBar.open('No reported post attached to this report', 'Close', {
+        duration: 3000,
       });
+      return;
     }
+
+    const postId = report.reportedPostId;
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Delete reported post',
+        message: 'Delete the reported post? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.adminService.deletePost(postId).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.adminService.resolveReport(report.id, 'Post deleted by admin').subscribe(() => {
+                this.snackBar.open('Post deleted and report resolved', 'Close', { duration: 3000 });
+                this.loadReports();
+                this.loadPosts(this.postsPage());
+                this.loadAnalytics();
+              });
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting reported post:', error);
+            this.snackBar.open('Failed to delete reported post', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    });
+  }
+
+  showReportedPost(report: Report) {
+    if (!report.reportedPostId) {
+      this.snackBar.open('No reported post attached to this report', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    this.router.navigate(['/post', report.reportedPostId]);
+  }
+
+  blockReportedUser(report: Report) {
+    this.openConfirmDialog(
+      {
+        title: 'Block user',
+        message: 'Block the reported user?',
+        confirmText: 'Block',
+        cancelText: 'Cancel',
+      },
+      () => {
+        this.adminService.banUser(report.reportedUser.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.adminService.resolveReport(report.id, 'User blocked by admin').subscribe(() => {
+                this.snackBar.open('User blocked and report resolved', 'Close', { duration: 3000 });
+                this.loadReports();
+                this.loadUsers(this.usersPage());
+                this.loadAnalytics();
+              });
+            }
+          },
+          error: (error) => {
+            console.error('Error blocking user:', error);
+            this.snackBar.open('Failed to block user', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    );
   }
 
   dismissReport(reportId: string) {
-    const adminNote = prompt('Enter admin note (optional):');
-    if (adminNote !== null) {
-      this.adminService.dismissReport(reportId, adminNote).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBar.open('Report dismissed successfully', 'Close', { duration: 3000 });
-            this.loadReports();
-          }
-        },
-        error: (error) => {
-          console.error('Error dismissing report:', error);
-          this.snackBar.open('Failed to dismiss report', 'Close', { duration: 3000 });
-        },
-      });
-    }
+    this.openConfirmDialog(
+      {
+        title: 'Dismiss report',
+        message: 'Dismiss this report?',
+        confirmText: 'Dismiss',
+        cancelText: 'Cancel',
+      },
+      () => {
+        this.adminService.dismissReport(reportId, '').subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Report dismissed successfully', 'Close', { duration: 3000 });
+              this.loadReports();
+            }
+          },
+          error: (error) => {
+            console.error('Error dismissing report:', error);
+            this.snackBar.open('Failed to dismiss report', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    );
+  }
+
+  private openConfirmDialog(
+    data: { title?: string; message: string; confirmText?: string; cancelText?: string },
+    onConfirm: () => void
+  ) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data,
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        onConfirm();
+      }
+    });
   }
 
   getStatusColor(status: string): string {

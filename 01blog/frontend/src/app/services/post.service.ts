@@ -59,10 +59,10 @@ export class PostService {
   uploadMedia(postId: string, file: File): Observable<any> {
     const formData = new FormData();
     formData.append('files', file);
-    return this.http.post(`http://localhost:8080/api/media/upload/${postId}`, formData);
+    return this.http.post(`${environment.apiUrl}/media/upload/${postId}`, formData);
   }
 
   deleteMedia(postId: string, mediaId: string): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/api/media/${mediaId}`);
+    return this.http.delete<void>(`${environment.apiUrl}/media/${mediaId}`);
   }
 }

@@ -51,6 +51,7 @@ public class Notification {
         LIKE,
         COMMENT,
         SUBSCRIPTION,
-        MENTION
+        MENTION,
+        POST
     }
 }

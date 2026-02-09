@@ -4,6 +4,8 @@
     [matBadgeHidden]="unreadCount === 0"
     matBadgeColor="warn"
     matBadgeSize="small"
+    aria-hidden="false"
+    [attr.aria-label]="'Notifications (' + unreadCount + ' unread)'"
   >
     notifications
   </mat-icon>

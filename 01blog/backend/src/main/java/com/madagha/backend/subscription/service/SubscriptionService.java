@@ -39,6 +39,10 @@ public class SubscriptionService {
 
                 if (existingSubscription.isPresent()) {
                         subscriptionRepository.delete(existingSubscription.get());
+                        notificationService.deleteLatestNotification(
+                                        targetUser,
+                                        Notification.NotificationType.SUBSCRIPTION,
+                                        subscriber.getId());
                         // Return response indicating the user is no longer subscribed
                         return SubscriptionResponse.builder()
                                         .subscriberId(subscriber.getId())

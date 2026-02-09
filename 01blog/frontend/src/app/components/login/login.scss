@@ -6,74 +6,19 @@
   padding: 20px;
   position: relative;
   overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(156, 39, 176, 0.3), transparent 70%);
-    border-radius: 50%;
-    top: -200px;
-    left: -200px;
-    animation: mysticalOrb 8s ease-in-out infinite;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255, 193, 7, 0.2), transparent 70%);
-    border-radius: 50%;
-    bottom: -150px;
-    right: -150px;
-    animation: mysticalOrb 10s ease-in-out infinite reverse;
-  }
-}
-
-@keyframes mysticalOrb {
-  0%,
-  100% {
-    transform: scale(1) translate(0, 0);
-  }
-  50% {
-    transform: scale(1.2) translate(50px, 50px);
-  }
 }
 
 .login-card {
   width: 100%;
   max-width: 480px;
-  background: rgba(26, 10, 46, 0.7);
-  backdrop-filter: blur(25px) saturate(180%);
-  border: 2px solid rgba(156, 39, 176, 0.5);
+  background: rgba(30, 15, 50, 0.9);
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(123, 31, 162, 0.4);
   border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(156, 39, 176, 0.3),
-    inset 0 0 30px rgba(255, 193, 7, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   position: relative;
   z-index: 1;
   overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 193, 7, 0.1), transparent);
-    animation: shimmer 3s ease-in-out infinite;
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
 }
 
 mat-card-header {
@@ -81,27 +26,23 @@ mat-card-header {
   flex-direction: column;
   align-items: center;
   padding: 32px 16px 24px;
-  background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(255, 193, 7, 0.1));
-  border-bottom: 1px solid rgba(156, 39, 176, 0.3);
+  background: rgba(123, 31, 162, 0.1);
+  border-bottom: 1px solid rgba(123, 31, 162, 0.3);
   margin-bottom: 32px;
 }
 
 .title {
   font-size: 36px;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffd54f 0%, #ff8f00 50%, #ffc107 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #7b1fa2;
   text-transform: uppercase;
   letter-spacing: 4px;
   margin-bottom: 8px;
-  filter: drop-shadow(0 0 20px rgba(255, 193, 7, 0.5));
 }
 
 .subtitle {
   font-size: 15px;
-  color: #ba68c8;
+  color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 500;
@@ -120,22 +61,15 @@ mat-card-content {
       .mdc-text-field {
         background: rgba(15, 5, 32, 0.5);
         border-radius: 12px;
-        border: 1px solid rgba(156, 39, 176, 0.3);
-        transition: all 0.3s ease;
-
-        &:hover {
-          border-color: rgba(156, 39, 176, 0.5);
-          box-shadow: 0 0 20px rgba(156, 39, 176, 0.2);
-        }
+        border: 1px solid rgba(123, 31, 162, 0.3);
 
         &--focused {
-          border-color: rgba(255, 193, 7, 0.6);
-          box-shadow: 0 0 25px rgba(156, 39, 176, 0.4);
+          border-color: #7b1fa2;
         }
       }
 
       .mat-mdc-form-field-label {
-        color: #ba68c8;
+        color: rgba(255, 255, 255, 0.6);
       }
     }
   }
@@ -148,18 +82,10 @@ mat-card-content {
   letter-spacing: 2px;
   margin-top: 12px;
   margin-bottom: 24px;
-  background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
-  border: 1px solid rgba(255, 193, 7, 0.4);
+  background: #7b1fa2;
+  border: none;
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(156, 39, 176, 0.4), inset 0 0 15px rgba(255, 193, 7, 0.1);
-  transition: all 0.3s ease;
-
-  &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);
-    box-shadow: 0 10px 35px rgba(156, 39, 176, 0.6), 0 0 40px rgba(255, 193, 7, 0.3),
-      inset 0 0 20px rgba(255, 193, 7, 0.2);
-    transform: translateY(-2px);
-  }
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 
   mat-spinner {
     margin: 0 auto;
@@ -172,24 +98,17 @@ mat-card-content {
   align-items: center;
   gap: 8px;
   padding: 20px;
-  border-top: 1px solid rgba(156, 39, 176, 0.3);
-  background: linear-gradient(180deg, rgba(26, 10, 46, 0.3), rgba(15, 5, 32, 0.5));
+  border-top: 1px solid rgba(123, 31, 162, 0.3);
+  background: rgba(30, 15, 50, 0.5);
 }
 
 .register-text {
-  color: #ba68c8;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
 }
 
 .register-link {
-  color: #ffd54f;
+  color: #7b1fa2;
   font-weight: 700;
   letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: #ff8f00;
-    text-shadow: 0 0 15px rgba(255, 193, 7, 0.6);
-  }
 }

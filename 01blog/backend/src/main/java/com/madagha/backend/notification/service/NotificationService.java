@@ -62,6 +62,13 @@ public class NotificationService {
         notificationRepository.saveAll(notifications);
     }
 
+    @Transactional
+    public void deleteLatestNotification(User user, Notification.NotificationType type, UUID referenceId) {
+        notificationRepository
+                .findFirstByUserAndTypeAndReferenceIdOrderByCreatedAtDesc(user, type, referenceId)
+                .ifPresent(notificationRepository::delete);
+    }
+
     private NotificationResponse mapToResponse(Notification notification) {
         return NotificationResponse.builder()
                 .id(notification.getId())

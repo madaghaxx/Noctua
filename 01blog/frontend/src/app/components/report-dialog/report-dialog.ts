@@ -19,7 +19,7 @@ export class ReportDialogComponent {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ReportDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { postId: string }
+    @Inject(MAT_DIALOG_DATA) public data: { title?: string }
   ) {
     this.form = this.fb.group({
       reason: ['', [Validators.required, Validators.maxLength(100)]],

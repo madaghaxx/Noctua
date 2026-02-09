@@ -9,10 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SocialService } from '../../services/social.service';
 import { CommentResponse } from '../../models/social.model';
 import { AuthService } from '../../services/auth.service';
 import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-comment-section',
@@ -28,6 +30,8 @@ import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
     MatDividerModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
+    ConfirmDialogComponent,
     TimeAgoPipe,
   ],
   templateUrl: './comment-section.html',
@@ -47,7 +51,8 @@ export class CommentSectionComponent implements OnInit {
     private fb: FormBuilder,
     private socialService: SocialService,
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {
     this.commentForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(1)]],
@@ -122,12 +127,24 @@ export class CommentSectionComponent implements OnInit {
   }
 
   deleteComment(commentId: string): void {
-    if (!confirm('Delete this comment?')) return;
-
-    this.socialService.deleteComment(this.postId, commentId).subscribe({
-      next: () => {
-        this.comments = this.comments.filter((c) => c.id !== commentId);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Delete comment',
+        message: 'Are you sure you want to delete this comment? This action cannot be undone.',
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
       },
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.socialService.deleteComment(this.postId, commentId).subscribe({
+          next: () => {
+            this.comments = this.comments.filter((c) => c.id !== commentId);
+          },
+        });
+      }
     });
   }
 

@@ -55,6 +55,7 @@ interface Report {
     username: string;
     avatar?: string;
   };
+  reportedPostId?: string;
   reason: string;
   status: string;
   createdAt: string;

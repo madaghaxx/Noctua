@@ -1,13 +1,13 @@
 .subscriptions-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 120px 24px 24px;
 }
 
 .page-title {
   font-size: 32px;
   margin-bottom: 24px;
-  color: #ffd54f;
+  color: #ffffff;
   text-shadow: 0 0 12px rgba(255, 213, 79, 0.4);
 }
 
@@ -35,7 +35,7 @@
       &.mdc-tab--active {
         .mdc-tab__text-label,
         .tab-icon {
-          color: #ffd54f;
+          color: #ffffff;
           text-shadow: 0 0 8px rgba(255, 213, 79, 0.3);
         }
       }
@@ -176,7 +176,7 @@
       .username {
         font-size: 16px;
         font-weight: 500;
-        color: #ffd54f;
+        color: #ffffff;
         text-shadow: 0 0 6px rgba(255, 213, 79, 0.3);
       }
 

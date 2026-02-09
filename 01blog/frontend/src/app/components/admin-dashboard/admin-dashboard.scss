@@ -1,13 +1,13 @@
 .admin-dashboard-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 120px 20px 20px;
 
   .dashboard-header {
     margin-bottom: 30px;
 
     h1 {
-      color: #ffd54f;
+      color: #ffffff;
       margin-bottom: 8px;
       font-size: 2.5rem;
       text-shadow: 0 0 20px rgba(255, 213, 79, 0.5);
@@ -54,7 +54,7 @@
               margin: 0;
               font-size: 2rem;
               font-weight: 600;
-              color: #ffd54f;
+              color: #ffffff;
             }
 
             p {
@@ -131,7 +131,7 @@
 
       .post-title {
         font-weight: 600;
-        color: #ffd54f;
+        color: #ffffff;
         margin-bottom: 4px;
       }
 
@@ -241,7 +241,7 @@
           background: rgba(156, 39, 176, 0.1);
 
           .mat-mdc-header-cell {
-            color: #ffd54f;
+            color: #ffffff;
             font-weight: 600;
             border-bottom: 1px solid rgba(156, 39, 176, 0.3);
           }

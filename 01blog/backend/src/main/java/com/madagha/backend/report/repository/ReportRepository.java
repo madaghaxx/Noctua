@@ -19,6 +19,8 @@ public interface ReportRepository extends JpaRepository<Report, UUID> {
 
     void deleteByReportedUserId(UUID reportedUserId);
 
+    void deleteByReporterId(UUID reporterId);
+
     @Query("SELECT COUNT(r) FROM Report r WHERE r.reportedUser.id = :userId AND r.status = :status")
     long countByReportedUserIdAndStatus(@Param("userId") UUID userId, @Param("status") ReportStatus status);
 

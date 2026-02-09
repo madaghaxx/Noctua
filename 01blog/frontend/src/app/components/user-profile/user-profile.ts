@@ -7,14 +7,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SubscriptionService } from '../../services/subscription.service';
 import { AuthService } from '../../services/auth.service';
 import { SocialService } from '../../services/social.service';
 import { PostService } from '../../services/post.service';
 import { CommentResponse, PageResponse } from '../../models/social.model';
 import { Post, PageResponse as PostPageResponse } from '../../models/post.model';
+import { User } from '../../models/auth.model';
+import { UserService } from '../../services/user';
+import { combineLatest } from 'rxjs';
 import { SharedHeaderComponent } from '../shared-header/shared-header';
+import { ReportDialogComponent } from '../report-dialog/report-dialog';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -27,6 +33,8 @@ import { SharedHeaderComponent } from '../shared-header/shared-header';
     MatTabsModule,
     MatChipsModule,
     RouterModule,
+    MatDialogModule,
+    MatSnackBarModule,
     SharedHeaderComponent,
   ],
   templateUrl: './user-profile.html',
@@ -43,8 +51,7 @@ export class UserProfileComponent implements OnInit {
   comments = signal<CommentResponse[]>([]);
   posts = signal<Post[]>([]);
 
-  // Mock user data - replace with actual API call
-  user = signal<any>(null);
+  user = signal<User | null>(null);
 
   constructor(
     private route: ActivatedRoute,
@@ -53,33 +60,50 @@ export class UserProfileComponent implements OnInit {
     private authService: AuthService,
     private socialService: SocialService,
     private postService: PostService,
-    private http: HttpClient
+    private userService: UserService,
+    private dialog: MatDialog,
+    private reportService: ReportService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.userId.set(params['id']);
-      this.loadProfile();
-    });
-
-    this.authService.currentUser$.subscribe((user) => {
-      this.currentUserId.set(user?.id || null);
-      this.isOwnProfile.set(this.userId() === this.currentUserId());
-    });
+    combineLatest([this.route.params, this.authService.currentUser$]).subscribe(
+      ([params, user]) => {
+        this.userId.set(params['id']);
+        this.currentUserId.set(user?.id || null);
+        this.isOwnProfile.set(this.userId() === this.currentUserId());
+        this.loadProfile();
+      }
+    );
   }
 
   loadProfile(): void {
     this.loading.set(true);
 
-    // Load user data
-    this.http.get<any>(`http://localhost:8080/api/users/${this.userId()}`).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.user.set(response.data);
-        }
+    const targetUserId = this.userId();
+    if (!targetUserId) {
+      this.loading.set(false);
+      return;
+    }
+
+    this.userService.getUserById(targetUserId).subscribe({
+      next: (user) => {
+        this.user.set(user);
       },
       error: () => {
-        // User not found, but continue loading other data
+        const fallbackUserId = this.currentUserId();
+        if (fallbackUserId && fallbackUserId !== targetUserId) {
+          this.router.navigate(['/profile', fallbackUserId]);
+          return;
+        }
+
+        if (this.isOwnProfile()) {
+          this.userService.getCurrentUser().subscribe({
+            next: (currentUser) => {
+              this.user.set(currentUser);
+            },
+          });
+        }
       },
     });
 
@@ -133,6 +157,40 @@ export class UserProfileComponent implements OnInit {
         this.isSubscribed.set(response.subscribed);
         this.subscriberCount.set(response.subscriberCount);
       },
+    });
+  }
+
+  openReportUserDialog(): void {
+    const targetUserId = this.userId();
+    if (!targetUserId || this.isOwnProfile()) return;
+
+    const dialogRef = this.dialog.open(ReportDialogComponent, {
+      width: '400px',
+      data: { title: 'Report User' },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.reportService
+          .createReport({
+            reportedUserId: targetUserId,
+            reportedPostId: null,
+            reason: result.reason,
+            details: result.details,
+          })
+          .subscribe({
+            next: () => {
+              this.snackBar.open('Report submitted successfully.', 'Close', {
+                duration: 3000,
+              });
+            },
+            error: () => {
+              this.snackBar.open('Failed to submit report.', 'Close', {
+                duration: 3000,
+              });
+            },
+          });
+      }
     });
   }
 

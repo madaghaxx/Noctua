@@ -46,7 +46,7 @@ export interface SubscriptionStatusResponse {
 
 export interface NotificationResponse {
   id: string;
-  type: 'LIKE' | 'COMMENT' | 'SUBSCRIPTION' | 'MENTION';
+  type: 'LIKE' | 'COMMENT' | 'SUBSCRIPTION' | 'MENTION' | 'POST';
   message: string;
   referenceId: string;
   isRead: boolean;

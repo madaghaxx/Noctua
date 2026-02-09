@@ -1,5 +1,8 @@
 package com.madagha.backend.report.service;
 
+import com.madagha.backend.common.exception.BadRequestException;
+import com.madagha.backend.common.exception.ConflictException;
+import com.madagha.backend.common.exception.ResourceNotFoundException;
 import com.madagha.backend.report.dto.CreateReportRequest;
 import com.madagha.backend.report.entity.Report;
 import com.madagha.backend.report.repository.ReportRepository;
@@ -19,14 +22,14 @@ public class ReportService {
     @Transactional
     public void createReport(String reporterUsername, CreateReportRequest request) {
         User reporter = userRepository.findByUsername(reporterUsername)
-                .orElseThrow(() -> new RuntimeException("Reporter not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reporter not found"));
 
         User reportedUser = userRepository.findById(request.getReportedUserId())
-                .orElseThrow(() -> new RuntimeException("Reported user not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Reported user not found"));
 
         // Check if user is trying to report themselves
         if (reporter.getId().equals(reportedUser.getId())) {
-            throw new RuntimeException("You cannot report yourself");
+            throw new BadRequestException("You cannot report yourself");
         }
 
         // Check if user has already reported this person
@@ -35,12 +38,13 @@ public class ReportService {
                 .anyMatch(report -> report.getReporter().getId().equals(reporter.getId()));
 
         if (alreadyReported) {
-            throw new RuntimeException("You have already reported this user");
+            throw new ConflictException("You have already reported this user");
         }
 
         Report report = Report.builder()
                 .reporter(reporter)
                 .reportedUser(reportedUser)
+                .reportedPostId(request.getReportedPostId())
                 .reason(request.getReason())
                 .build();
 

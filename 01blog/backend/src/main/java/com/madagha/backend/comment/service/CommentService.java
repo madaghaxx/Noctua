@@ -94,6 +94,13 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+
+        if (!comment.getPost().getOwner().getId().equals(user.getId())) {
+            notificationService.deleteLatestNotification(
+                    comment.getPost().getOwner(),
+                    Notification.NotificationType.COMMENT,
+                    comment.getPost().getId());
+        }
     }
 
     private CommentResponse mapToResponse(Comment comment) {

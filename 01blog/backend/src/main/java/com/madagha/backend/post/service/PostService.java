@@ -6,6 +6,8 @@ import com.madagha.backend.common.exception.UnauthorizedException;
 import com.madagha.backend.like.repository.LikeRepository;
 import com.madagha.backend.media.entity.Media;
 import com.madagha.backend.media.repository.MediaRepository;
+import com.madagha.backend.notification.entity.Notification;
+import com.madagha.backend.notification.service.NotificationService;
 import com.madagha.backend.post.dto.CreatePostRequest;
 import com.madagha.backend.post.dto.PostDto;
 import com.madagha.backend.post.entity.Post;
@@ -35,6 +37,7 @@ public class PostService {
         private final CommentRepository commentRepository;
         private final UserService userService;
         private final SubscriptionRepository subscriptionRepository;
+        private final NotificationService notificationService;
 
         @Transactional
         public PostDto createPost(CreatePostRequest request, String username) {
@@ -47,6 +50,17 @@ public class PostService {
                                 .build();
 
                 Post savedPost = postRepository.save(post);
+
+                // Notify subscribers about the new post
+                subscriptionRepository.findBySubscribedTo(user).forEach(subscription -> {
+                        User subscriber = subscription.getSubscriber();
+                        notificationService.createNotification(
+                                        subscriber,
+                                        Notification.NotificationType.POST,
+                                        user.getUsername() + " posted: " + savedPost.getTitle(),
+                                        savedPost.getId());
+                });
+
                 return mapToDto(savedPost);
         }
 

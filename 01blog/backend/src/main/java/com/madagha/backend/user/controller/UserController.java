@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -26,9 +25,9 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(user));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserDto>> getUserById(@PathVariable UUID id) {
-        UserDto user = userService.getUserById(id);
+    @GetMapping("/id/{userId}")
+    public ResponseEntity<ApiResponse<UserDto>> getUserById(@PathVariable java.util.UUID userId) {
+        UserDto user = userService.getUserById(userId);
         return ResponseEntity.ok(ApiResponse.success(user));
     }
 

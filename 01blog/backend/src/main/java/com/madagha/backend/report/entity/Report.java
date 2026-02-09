@@ -33,6 +33,9 @@ public class Report {
     @JoinColumn(name = "reported_user_id", nullable = false)
     private User reportedUser;
 
+    @Column(name = "reported_post_id")
+    private UUID reportedPostId;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String reason;
 

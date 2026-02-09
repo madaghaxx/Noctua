@@ -19,13 +19,7 @@ export class UserService {
 
   getUserById(id: string): Observable<User> {
     return this.http
-      .get<ApiResponse<User>>(`${this.apiUrl}/${id}`)
-      .pipe(map((response) => response.data));
-  }
-
-  getUserByUsername(username: string): Observable<User> {
-    return this.http
-      .get<ApiResponse<User>>(`${this.apiUrl}/username/${username}`)
+      .get<ApiResponse<User>>(`${this.apiUrl}/id/${id}`)
       .pipe(map((response) => response.data));
   }
 

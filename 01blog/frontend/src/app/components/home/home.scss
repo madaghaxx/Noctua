@@ -12,28 +12,16 @@
   width: calc(100% - 80px);
   max-width: 1200px;
   height: 70px;
-  background: rgba(26, 10, 46, 0.4);
-  backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(156, 39, 176, 0.4);
+  background: rgba(30, 15, 50, 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(123, 31, 162, 0.3);
   border-radius: 35px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(156, 39, 176, 0.2),
-    inset 0 0 20px rgba(255, 193, 7, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 0 32px;
   z-index: 100;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(26, 10, 46, 0.5);
-    border-color: rgba(156, 39, 176, 0.6);
-    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5), 0 0 40px rgba(156, 39, 176, 0.3),
-      inset 0 0 30px rgba(255, 193, 7, 0.08);
-  }
 
   button[mat-icon-button] {
-    &:hover {
-      background: rgba(156, 39, 176, 0.2);
-      transform: scale(1.1);
-    }
+    color: rgba(255, 255, 255, 0.7);
   }
 }
 
@@ -43,22 +31,7 @@
   text-transform: uppercase;
   letter-spacing: 4px;
   margin-left: 12px;
-  background: linear-gradient(135deg, #ffd54f 0%, #ff8f00 50%, #ffc107 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 20px rgba(255, 193, 7, 0.4));
-  animation: logoGlow 3s ease-in-out infinite;
-}
-
-@keyframes logoGlow {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 20px rgba(255, 193, 7, 0.4));
-  }
-  50% {
-    filter: drop-shadow(0 0 30px rgba(255, 193, 7, 0.6));
-  }
+  color: #7b1fa2;
 }
 
 .spacer {
@@ -66,31 +39,25 @@
 }
 
 ::ng-deep .mat-mdc-menu-panel {
-  background: rgba(26, 10, 46, 0.95) !important;
+  background: rgba(30, 15, 50, 0.95) !important;
   backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(156, 39, 176, 0.4) !important;
+  border: 1px solid rgba(123, 31, 162, 0.3) !important;
   border-radius: 16px !important;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 30px rgba(156, 39, 176, 0.3) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
 
   .mat-mdc-menu-item {
-    color: #e8d4f8 !important;
-    transition: all 0.2s ease !important;
-
-    &:hover {
-      background: rgba(156, 39, 176, 0.2) !important;
-      color: #ffd54f !important;
-    }
+    color: rgba(255, 255, 255, 0.85) !important;
 
     mat-icon {
-      color: #9c27b0 !important;
+      color: #7b1fa2 !important;
     }
   }
 }
 
 ::ng-deep .user-menu-header {
   padding: 20px;
-  background: linear-gradient(135deg, rgba(156, 39, 176, 0.15), rgba(255, 193, 7, 0.1));
-  border-bottom: 1px solid rgba(156, 39, 176, 0.3);
+  background: rgba(123, 31, 162, 0.1);
+  border-bottom: 1px solid rgba(123, 31, 162, 0.3);
   margin: -8px -8px 8px -8px;
   border-radius: 16px 16px 0 0;
 
@@ -99,14 +66,13 @@
     font-size: 17px;
     font-weight: 600;
     margin-bottom: 6px;
-    color: #ffd54f;
-    text-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+    color: #ffffff;
   }
 
   .email {
     display: block;
     font-size: 13px;
-    color: #ba68c8;
+    color: rgba(255, 255, 255, 0.6);
   }
 }
 
@@ -133,12 +99,6 @@
     color: #80ddff;
     margin-bottom: 48px;
   }
-}
-
-.volt-glow-text {
-  color: #00bcff;
-  text-shadow: 0 0 10px rgba(0, 188, 255, 0.5), 0 0 20px rgba(0, 188, 255, 0.3),
-    0 0 30px rgba(0, 188, 255, 0.1);
 }
 
 .coming-soon {
@@ -291,7 +251,7 @@
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 12px;
-  color: #ffd54f;
+  color: #ffffff;
 }
 
 .trending-tags ul {
@@ -315,7 +275,7 @@
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 12px;
-  color: #ffd54f;
+  color: #ffffff;
 }
 
 .suggested-users ul {
@@ -329,25 +289,6 @@
   color: #e8d4f8;
   font-weight: 500;
   font-size: 15px;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes border-flow {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.3;
-  }
 }
 
 @media (max-width: 768px) {

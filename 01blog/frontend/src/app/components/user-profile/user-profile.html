@@ -7,13 +7,6 @@
         <mat-card class="profile-header wizard-card">
           <div class="cover-image"></div>
 
-          <div class="profile-navigation">
-            <button mat-raised-button (click)="navigateToHome()" class="home-btn wizard-button">
-              <mat-icon>home</mat-icon>
-              Home
-            </button>
-          </div>
-
           <div class="profile-info">
             <div class="avatar-section">
               <div class="avatar">
@@ -46,6 +39,15 @@
               >
                 <mat-icon>{{ isSubscribed() ? 'check' : 'person_add' }}</mat-icon>
                 {{ isSubscribed() ? 'Subscribed' : 'Subscribe' }}
+              </button>
+              <button
+                mat-raised-button
+                color="warn"
+                (click)="openReportUserDialog()"
+                class="subscribe-btn wizard-button"
+              >
+                <mat-icon>flag</mat-icon>
+                Report User
               </button>
             </div>
           </div>
@@ -106,13 +108,6 @@
                 } @else {
                 <p class="empty-message">No comments yet</p>
                 }
-              </div>
-            </mat-tab>
-
-            <mat-tab label="About">
-              <div class="tab-content">
-                <h3 class="enchanted-gold">About</h3>
-                <p>User bio and information will appear here</p>
               </div>
             </mat-tab>
           </mat-tab-group>

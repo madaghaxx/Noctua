@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface CreateReportRequest {
   reportedUserId: string;
+  reportedPostId?: string | null;
   reason: string;
   details?: string;
 }

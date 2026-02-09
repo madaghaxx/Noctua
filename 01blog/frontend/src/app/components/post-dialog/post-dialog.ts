@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PostService } from '../../services/post.service';
 import { Post, CreatePostRequest, UpdatePostRequest } from '../../models/post.model';
 
@@ -24,6 +25,7 @@ import { Post, CreatePostRequest, UpdatePostRequest } from '../../models/post.mo
     MatIconModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatSnackBarModule,
   ],
   templateUrl: './post-dialog.html',
   styleUrls: ['./post-dialog.scss'],
@@ -40,6 +42,7 @@ export class PostDialogComponent implements OnInit {
     private fb: FormBuilder,
     private postService: PostService,
     private dialogRef: MatDialogRef<PostDialogComponent>,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: { post?: Post }
   ) {
     this.postForm = this.fb.group({
@@ -68,21 +71,22 @@ export class PostDialogComponent implements OnInit {
       this.selectedFiles.push(...files);
 
       // Create previews for images and videos
-      const newPreviews: { url: string; type: string }[] = [];
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
           const reader = new FileReader();
           reader.onload = (e) => {
-            newPreviews.push({ url: e.target?.result as string, type: 'image' });
-            this.mediaPreview.set([...this.mediaPreview(), ...newPreviews]);
+            const preview = { url: e.target?.result as string, type: 'image' };
+            this.mediaPreview.set([...this.mediaPreview(), preview]);
           };
           reader.readAsDataURL(file);
         } else if (file.type.startsWith('video/')) {
           const url = URL.createObjectURL(file);
-          newPreviews.push({ url, type: 'video' });
-          this.mediaPreview.set([...this.mediaPreview(), ...newPreviews]);
+          const preview = { url, type: 'video' };
+          this.mediaPreview.set([...this.mediaPreview(), preview]);
         }
       });
+
+      input.value = '';
     }
   }
 
@@ -121,7 +125,7 @@ export class PostDialogComponent implements OnInit {
         error: (error) => {
           console.error('Error updating post:', error);
           this.loading = false;
-          alert('Failed to update post');
+          this.snackBar.open('Failed to update post', 'Close', { duration: 3000 });
         },
       });
     } else {
@@ -138,7 +142,7 @@ export class PostDialogComponent implements OnInit {
         error: (error) => {
           console.error('Error creating post:', error);
           this.loading = false;
-          alert('Failed to create post');
+          this.snackBar.open('Failed to create post', 'Close', { duration: 3000 });
         },
       });
     }

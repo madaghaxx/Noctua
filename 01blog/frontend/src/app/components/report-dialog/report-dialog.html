@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Report Post</h2>
+<h2 mat-dialog-title>{{ data.title || 'Report' }}</h2>
 <form [formGroup]="form" (ngSubmit)="submit()" class="report-form">
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Reason</mat-label>
