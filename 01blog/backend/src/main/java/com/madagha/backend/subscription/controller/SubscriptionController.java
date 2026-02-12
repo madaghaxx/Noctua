@@ -30,8 +30,9 @@ public class SubscriptionController {
         SubscriptionResponse response = subscriptionService.toggleSubscription(userId, user);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("subscribed", response != null);
+        result.put("subscribed", response.isSubscribed());
         result.put("subscriberCount", subscriptionService.getSubscriberCount(userId));
+        result.put("subscriptionCount", subscriptionService.getSubscriptionCount(userId));
         if (response != null) {
             result.put("subscription", response);
         }

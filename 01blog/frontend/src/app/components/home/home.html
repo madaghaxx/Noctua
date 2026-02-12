@@ -1,16 +1,16 @@
 <div class="home-container">
-  <mat-toolbar class="toolbar volt-glow">
-    <button mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-toolbar class="topbar">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Open menu">
       <mat-icon>menu</mat-icon>
     </button>
 
-    <span class="logo gold-accent">Noctua</span>
+    <span class="logo">Noctua</span>
     <span class="spacer"></span>
 
     @if (currentUser) {
     <app-notification-bell></app-notification-bell>
 
-    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="User menu">
       <mat-icon>account_circle</mat-icon>
     </button>
     }
@@ -37,7 +37,7 @@
 
   <mat-menu #userMenu="matMenu">
     <div class="user-menu-header">
-      <span class="username gold-accent">{{ currentUser?.username }}</span>
+      <span class="username">{{ currentUser?.username }}</span>
       <span class="email">{{ currentUser?.email }}</span>
     </div>
     <mat-divider></mat-divider>
@@ -57,17 +57,102 @@
     </button>
   </mat-menu>
 
-  <div class="content">
-    <div style="display: flex; justify-content: center">
-      <div style="flex: 0 0 70%; max-width: 70%; min-width: 340px">
-        @if (isAdmin()) {
-        <button mat-raised-button color="accent" routerLink="/admin" style="margin: 16px 0 0 16px">
-          <mat-icon>admin_panel_settings</mat-icon>
-          Admin Panel
-        </button>
-        }
-        <app-post-feed></app-post-feed>
+  <main class="home-main">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="eyebrow">Social learning platform</div>
+        <h1>Publish your progress. Connect with curious minds.</h1>
+        <p>
+          Build a public learning trail. Share insights, follow creators, and discover the work that
+          moves you forward.
+        </p>
+
+        <div class="hero-actions">
+          <button mat-raised-button color="primary" routerLink="/discover">
+            Discover creators
+          </button>
+          @if (currentUser) {
+          <button mat-stroked-button color="accent" (click)="goToProfile()">My profile</button>
+          } @if (!currentUser) {
+          <button mat-stroked-button color="accent" routerLink="/login">Sign in</button>
+          }
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-label">Focus</span>
+            <span class="stat-value">Curated feeds</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Momentum</span>
+            <span class="stat-value">Daily publishing</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Connection</span>
+            <span class="stat-value">Subscriber updates</span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+
+      <aside class="hero-aside">
+        <div class="action-card">
+          <h3>Quick actions</h3>
+          <button mat-stroked-button routerLink="/discover">
+            <mat-icon>search</mat-icon>
+            Find creators
+          </button>
+          <button mat-stroked-button (click)="goToSubscriptions()">
+            <mat-icon>people</mat-icon>
+            My subscriptions
+          </button>
+          @if (isAdmin()) {
+          <button mat-stroked-button routerLink="/admin">
+            <mat-icon>admin_panel_settings</mat-icon>
+            Admin panel
+          </button>
+          }
+        </div>
+
+        <div class="action-card highlight">
+          <h3>Share today</h3>
+          <p>Post your latest breakthrough and spark discussion with your network.</p>
+          <div class="highlight-tags">
+            <span>#learning</span>
+            <span>#buildinpublic</span>
+            <span>#design</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="feed-section">
+      <div class="feed-header">
+        <div>
+          <h2>Latest from your network</h2>
+          <p>Curated posts from people you follow.</p>
+        </div>
+        <button mat-stroked-button color="accent" routerLink="/discover">Find more people</button>
+      </div>
+
+      <div class="feed-layout">
+        <div class="feed-column">
+          <app-post-feed></app-post-feed>
+        </div>
+        <aside class="side-column">
+          <div class="info-card">
+            <h3>Pro tips</h3>
+            <ul>
+              <li>Keep posts concise and add media previews.</li>
+              <li>Subscribe to peers to receive updates instantly.</li>
+              <li>Report content that breaks community standards.</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h3>Community standards</h3>
+            <p>Be constructive, give credit, and help others learn in public.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
 </div>

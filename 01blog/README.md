@@ -113,9 +113,23 @@ The frontend will start on `http://localhost:4200`
 
 ### Admin User
 
-- **Username**: admin
-- **Password**: admin123
-- **Email**: admin@noctua.com
+- **Username**: ballas
+- **Password**: orokins
+- **Email**: ballas@admin.local
+
+If you need to reset the database and recreate the admin user, run:
+
+```bash
+./scripts/reset-db.sh
+```
+
+The script expects a running PostgreSQL container named `blog-postgres` (see docker-compose.yml). You can override settings via env vars:
+
+```bash
+DB_CONTAINER=blog-postgres DB_NAME=blogdb DB_USER=tenno DB_PASSWORD=vor_speaks_truth \
+ADMIN_USERNAME=ballas ADMIN_PASSWORD=orokins ADMIN_EMAIL=ballas@admin.local \
+./scripts/reset-db.sh
+```
 
 ### Regular User
 

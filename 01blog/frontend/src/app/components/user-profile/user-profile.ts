@@ -72,6 +72,18 @@ export class UserProfileComponent implements OnInit {
         this.userId.set(params['id']);
         this.currentUserId.set(user?.id || null);
         this.isOwnProfile.set(this.userId() === this.currentUserId());
+        if (!user) {
+          this.loading.set(false);
+          this.user.set(null);
+          this.isSubscribed.set(false);
+          this.subscriberCount.set(0);
+          this.subscriptionCount.set(0);
+          this.comments.set([]);
+          this.posts.set([]);
+          this.router.navigate(['/login']);
+          return;
+        }
+
         this.loadProfile();
       }
     );
@@ -82,6 +94,11 @@ export class UserProfileComponent implements OnInit {
 
     const targetUserId = this.userId();
     if (!targetUserId) {
+      this.loading.set(false);
+      return;
+    }
+
+    if (!this.currentUserId()) {
       this.loading.set(false);
       return;
     }

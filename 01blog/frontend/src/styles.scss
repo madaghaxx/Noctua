@@ -81,6 +81,46 @@ body {
   overflow-x: hidden;
 }
 
+/* Prevent mat-icon clipping across cards, dialogs, and menus */
+mat-icon,
+.mat-icon,
+.mat-mdc-icon-button .mat-icon {
+  display: inline-block;
+  line-height: 1;
+  overflow: visible;
+}
+
+mat-icon svg,
+.mat-icon svg {
+  width: 1.1em;
+  height: 1.1em;
+  display: block;
+}
+
+.mat-mdc-icon-button {
+  line-height: 1;
+}
+
+/* Popup readability (dialogs, menus, snackbars, selects) */
+.cdk-overlay-backdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface,
+.mat-mdc-menu-panel,
+.mat-mdc-select-panel,
+.mat-mdc-autocomplete-panel,
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  background-color: rgba(26, 10, 46, 0.98) !important;
+  color: #ffffff;
+  border: 1px solid rgba(156, 39, 176, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 10px;
+}
+
 /* Arcane scrollbar styling */
 * {
   scrollbar-width: thin;

@@ -1,118 +1,115 @@
 <app-shared-header></app-shared-header>
 
 <div class="profile-container">
-  <div class="content">
-    <div style="display: flex; justify-content: center">
-      <div style="flex: 0 0 70%; max-width: 70%; min-width: 340px">
-        <mat-card class="profile-header wizard-card">
-          <div class="cover-image"></div>
+  <div class="profile-layout">
+    <mat-card class="profile-hero">
+      <div class="cover-image"></div>
 
-          <div class="profile-info">
-            <div class="avatar-section">
-              <div class="avatar">
-                <mat-icon>account_circle</mat-icon>
-              </div>
+      <div class="profile-info">
+        <div class="avatar-section">
+          <div
+            class="avatar"
+            [style.background-image]="user()?.avatar ? 'url(' + user()?.avatar + ')' : 'none'"
+          >
+            <mat-icon *ngIf="!user()?.avatar">account_circle</mat-icon>
+          </div>
+        </div>
+
+        <div class="user-details">
+          <h1 class="username">{{ user()?.username || 'Loading...' }}</h1>
+          <p class="user-subtitle">Learning in public · Building momentum</p>
+          <div class="user-stats">
+            <div class="stat">
+              <span class="stat-value">{{ subscriberCount() }}</span>
+              <span class="stat-label">Subscribers</span>
             </div>
-
-            <div class="user-details">
-              <h1 class="username enchanted-gold">{{ user()?.username || 'Loading...' }}</h1>
-              <p class="user-stats">
-                <span class="stat">
-                  <strong class="enchanted-gold">{{ subscriberCount() }}</strong> subscribers
-                </span>
-                <span class="stat">
-                  <strong class="enchanted-gold">{{ subscriptionCount() }}</strong> subscriptions
-                </span>
-                <span class="stat">
-                  <strong class="enchanted-gold">{{ comments().length }}</strong> comments
-                </span>
-              </p>
+            <div class="stat">
+              <span class="stat-value">{{ subscriptionCount() }}</span>
+              <span class="stat-label">Subscriptions</span>
             </div>
-
-            <div class="profile-actions" *ngIf="!isOwnProfile()">
-              <button
-                mat-raised-button
-                [color]="isSubscribed() ? 'accent' : 'primary'"
-                (click)="toggleSubscription()"
-                [disabled]="loading()"
-                class="subscribe-btn wizard-button"
-              >
-                <mat-icon>{{ isSubscribed() ? 'check' : 'person_add' }}</mat-icon>
-                {{ isSubscribed() ? 'Subscribed' : 'Subscribe' }}
-              </button>
-              <button
-                mat-raised-button
-                color="warn"
-                (click)="openReportUserDialog()"
-                class="subscribe-btn wizard-button"
-              >
-                <mat-icon>flag</mat-icon>
-                Report User
-              </button>
+            <div class="stat">
+              <span class="stat-value">{{ comments().length }}</span>
+              <span class="stat-label">Comments</span>
             </div>
           </div>
-        </mat-card>
+        </div>
 
-        <mat-card class="profile-content wizard-card">
-          <mat-tab-group animationDuration="300ms" color="primary">
-            <mat-tab label="Posts">
-              <div class="tab-content">
-                @if (posts().length > 0) {
-                <div class="posts-list">
-                  @for (post of posts(); track post.id) {
-                  <mat-card class="post-card" [routerLink]="['/post', post.id]">
-                    <mat-card-header>
-                      <mat-card-title>{{ post.title }}</mat-card-title>
-                      <mat-card-subtitle>{{ post.createdAt | date : 'short' }}</mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                      <p class="post-excerpt">{{ post.content.substring(0, 200) }}...</p>
-                    </mat-card-content>
-                    <mat-card-actions>
-                      <button mat-button>
-                        <mat-icon>thumb_up</mat-icon>
-                        {{ post.likeCount || 0 }}
-                      </button>
-                      <button mat-button>
-                        <mat-icon>comment</mat-icon>
-                        {{ post.commentCount || 0 }}
-                      </button>
-                    </mat-card-actions>
-                  </mat-card>
-                  }
-                </div>
-                } @else {
-                <p class="empty-message">No posts yet</p>
-                }
-              </div>
-            </mat-tab>
-
-            <mat-tab label="Comments">
-              <div class="tab-content">
-                @if (comments().length > 0) {
-                <div class="comments-list">
-                  @for (comment of comments(); track comment.id) {
-                  <mat-card class="comment-card">
-                    <mat-card-content>
-                      <p class="comment-content">{{ comment.content }}</p>
-                      <div class="comment-meta">
-                        <span class="post-link"
-                          >On post: <a [routerLink]="['/post', comment.postId]">View Post</a></span
-                        >
-                        <span class="comment-date">{{ comment.createdAt | date : 'short' }}</span>
-                      </div>
-                    </mat-card-content>
-                  </mat-card>
-                  }
-                </div>
-                } @else {
-                <p class="empty-message">No comments yet</p>
-                }
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-        </mat-card>
+        <div class="profile-actions" *ngIf="!isOwnProfile()">
+          <button
+            mat-raised-button
+            [color]="isSubscribed() ? 'accent' : 'primary'"
+            (click)="toggleSubscription()"
+            [disabled]="loading()"
+          >
+            <mat-icon>{{ isSubscribed() ? 'check' : 'person_add' }}</mat-icon>
+            {{ isSubscribed() ? 'Subscribed' : 'Subscribe' }}
+          </button>
+          <button mat-stroked-button color="warn" (click)="openReportUserDialog()">
+            <mat-icon>flag</mat-icon>
+            Report
+          </button>
+        </div>
       </div>
-    </div>
+    </mat-card>
+
+    <mat-card class="profile-content">
+      <mat-tab-group animationDuration="300ms" color="primary">
+        <mat-tab label="Posts">
+          <div class="tab-content">
+            @if (posts().length > 0) {
+            <div class="posts-list">
+              @for (post of posts(); track post.id) {
+              <mat-card class="post-card" [routerLink]="['/post', post.id]">
+                <mat-card-header>
+                  <mat-card-title>{{ post.title }}</mat-card-title>
+                  <mat-card-subtitle>{{ post.createdAt | date : 'short' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p class="post-excerpt">{{ post.content.substring(0, 200) }}...</p>
+                </mat-card-content>
+                <mat-card-actions>
+                  <button mat-button>
+                    <mat-icon>thumb_up</mat-icon>
+                    {{ post.likeCount || 0 }}
+                  </button>
+                  <button mat-button>
+                    <mat-icon>comment</mat-icon>
+                    {{ post.commentCount || 0 }}
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+              }
+            </div>
+            } @else {
+            <p class="empty-message">No posts yet</p>
+            }
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Comments">
+          <div class="tab-content">
+            @if (comments().length > 0) {
+            <div class="comments-list">
+              @for (comment of comments(); track comment.id) {
+              <mat-card class="comment-card">
+                <mat-card-content>
+                  <p class="comment-content">{{ comment.content }}</p>
+                  <div class="comment-meta">
+                    <span class="post-link"
+                      >On post: <a [routerLink]="['/post', comment.postId]">View Post</a></span
+                    >
+                    <span class="comment-date">{{ comment.createdAt | date : 'short' }}</span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+              }
+            </div>
+            } @else {
+            <p class="empty-message">No comments yet</p>
+            }
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
   </div>
 </div>

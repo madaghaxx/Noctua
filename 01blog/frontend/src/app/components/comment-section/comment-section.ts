@@ -31,7 +31,6 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog';
     MatMenuModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    ConfirmDialogComponent,
     TimeAgoPipe,
   ],
   templateUrl: './comment-section.html',
