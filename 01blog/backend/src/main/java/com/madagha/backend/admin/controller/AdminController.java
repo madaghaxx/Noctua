@@ -69,6 +69,18 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.<Void>success("Post deleted successfully", null));
     }
 
+    @PostMapping("/posts/{postId}/hide")
+    public ResponseEntity<ApiResponse<Void>> hidePost(@PathVariable UUID postId) {
+        adminService.hidePost(postId);
+        return ResponseEntity.ok(ApiResponse.<Void>success("Post hidden successfully", null));
+    }
+
+    @PostMapping("/posts/{postId}/unhide")
+    public ResponseEntity<ApiResponse<Void>> unhidePost(@PathVariable UUID postId) {
+        adminService.unhidePost(postId);
+        return ResponseEntity.ok(ApiResponse.<Void>success("Post unhidden successfully", null));
+    }
+
     // Report Management Endpoints
     @GetMapping("/reports/pending")
     public ResponseEntity<ApiResponse<List<ReportDto>>> getPendingReports() {

@@ -52,6 +52,7 @@ interface PostAdmin {
   commentCount: number;
   createdAt: string;
   updatedAt: string;
+  hidden: boolean;
   reported: boolean;
   reportCount: number;
 }
@@ -116,7 +117,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // Table columns
   userColumns = ['avatar', 'username', 'email', 'role', 'status', 'stats', 'actions'];
-  postColumns = ['title', 'owner', 'stats', 'reports', 'actions'];
+  postColumns = ['title', 'owner', 'stats', 'visibility', 'reports', 'actions'];
   reportColumns = ['reporter', 'reportedUser', 'reason', 'status', 'actions'];
 
   constructor(
@@ -324,6 +325,56 @@ export class AdminDashboardComponent implements OnInit {
         });
       }
     });
+  }
+
+  hidePost(post: PostAdmin) {
+    this.openConfirmDialog(
+      {
+        title: 'Hide post',
+        message: 'Hide this post from users? It will no longer appear in feeds.',
+        confirmText: 'Hide',
+        cancelText: 'Cancel',
+      },
+      () => {
+        this.adminService.hidePost(post.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Post hidden', 'Close', { duration: 3000 });
+              this.loadPosts(this.postsPage());
+            }
+          },
+          error: (error) => {
+            console.error('Error hiding post:', error);
+            this.snackBar.open('Failed to hide post', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    );
+  }
+
+  unhidePost(post: PostAdmin) {
+    this.openConfirmDialog(
+      {
+        title: 'Unhide post',
+        message: 'Make this post visible to users again?',
+        confirmText: 'Unhide',
+        cancelText: 'Cancel',
+      },
+      () => {
+        this.adminService.unhidePost(post.id).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.snackBar.open('Post unhidden', 'Close', { duration: 3000 });
+              this.loadPosts(this.postsPage());
+            }
+          },
+          error: (error) => {
+            console.error('Error unhiding post:', error);
+            this.snackBar.open('Failed to unhide post', 'Close', { duration: 3000 });
+          },
+        });
+      }
+    );
   }
 
   deleteReportedPost(report: Report) {

@@ -36,6 +36,10 @@ public class Post {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean hidden = false;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

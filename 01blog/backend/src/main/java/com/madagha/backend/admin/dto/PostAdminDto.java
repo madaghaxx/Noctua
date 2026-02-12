@@ -24,6 +24,7 @@ public class PostAdminDto {
     private Long commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean hidden;
     private boolean reported;
     private int reportCount;
 

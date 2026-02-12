@@ -17,11 +17,20 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+        Page<Post> findAllByHiddenFalseOrderByCreatedAtDesc(Pageable pageable);
+
     Page<Post> findByOwnerInOrderByCreatedAtDesc(java.util.List<com.madagha.backend.user.entity.User> owners,
             Pageable pageable);
 
+        Page<Post> findByOwnerIdAndHiddenFalseOrderByCreatedAtDesc(UUID ownerId, Pageable pageable);
+
     @org.springframework.data.jpa.repository.Query("SELECT p FROM Post p WHERE p.owner IN (SELECT s.subscribedTo FROM com.madagha.backend.subscription.entity.Subscription s WHERE s.subscriber = :user) ORDER BY p.createdAt DESC")
     Page<Post> findPostsForSubscriber(
+            @org.springframework.data.repository.query.Param("user") com.madagha.backend.user.entity.User user,
+            Pageable pageable);
+
+    @org.springframework.data.jpa.repository.Query("SELECT p FROM Post p WHERE p.hidden = false AND p.owner IN (SELECT s.subscribedTo FROM com.madagha.backend.subscription.entity.Subscription s WHERE s.subscriber = :user) ORDER BY p.createdAt DESC")
+    Page<Post> findVisiblePostsForSubscriber(
             @org.springframework.data.repository.query.Param("user") com.madagha.backend.user.entity.User user,
             Pageable pageable);
 

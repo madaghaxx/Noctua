@@ -212,6 +212,16 @@
                 </td>
               </ng-container>
 
+              <!-- Visibility Column -->
+              <ng-container matColumnDef="visibility">
+                <th mat-header-cell *matHeaderCellDef>Visibility</th>
+                <td mat-cell *matCellDef="let post">
+                  <mat-chip [color]="post.hidden ? 'warn' : 'primary'">
+                    {{ post.hidden ? 'Hidden' : 'Visible' }}
+                  </mat-chip>
+                </td>
+              </ng-container>
+
               <!-- Reports Column -->
               <ng-container matColumnDef="reports">
                 <th mat-header-cell *matHeaderCellDef>Reports</th>
@@ -231,6 +241,14 @@
                     <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #postMenu="matMenu">
+                    <button mat-menu-item *ngIf="!post.hidden" (click)="hidePost(post)">
+                      <mat-icon>visibility_off</mat-icon>
+                      <span>Hide Post</span>
+                    </button>
+                    <button mat-menu-item *ngIf="post.hidden" (click)="unhidePost(post)">
+                      <mat-icon>visibility</mat-icon>
+                      <span>Unhide Post</span>
+                    </button>
                     <button mat-menu-item (click)="deletePost(post.id)" class="delete-action">
                       <mat-icon>delete</mat-icon>
                       <span>Delete Post</span>

@@ -110,6 +110,22 @@ public class AdminService {
     }
 
     @Transactional
+    public void hidePost(UUID postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        post.setHidden(true);
+        postRepository.save(post);
+    }
+
+    @Transactional
+    public void unhidePost(UUID postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        post.setHidden(false);
+        postRepository.save(post);
+    }
+
+    @Transactional
     public void deletePost(UUID postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
@@ -209,6 +225,7 @@ public class AdminService {
                 .commentCount(commentRepository.countByPostId(post.getId()))
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .hidden(post.isHidden())
                 .reported(reportCount > 0)
                 .reportCount((int) reportCount)
                 .build();

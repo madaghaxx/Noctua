@@ -39,6 +39,7 @@ interface PostAdmin {
   commentCount: number;
   createdAt: string;
   updatedAt: string;
+  hidden: boolean;
   reported: boolean;
   reportCount: number;
 }
@@ -110,6 +111,14 @@ export class AdminService {
 
   deletePost(postId: string): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.API_URL}/posts/${postId}`);
+  }
+
+  hidePost(postId: string): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(`${this.API_URL}/posts/${postId}/hide`, {});
+  }
+
+  unhidePost(postId: string): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(`${this.API_URL}/posts/${postId}/unhide`, {});
   }
 
   // Report Management

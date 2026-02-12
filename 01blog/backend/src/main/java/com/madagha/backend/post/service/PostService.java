@@ -103,14 +103,17 @@ public class PostService {
         }
 
         public PostDto getPostById(UUID id) {
-                Post post = postRepository.findById(id)
-                                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
+                        Post post = postRepository.findById(id)
+                                        .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
+                        if (post.isHidden()) {
+                                throw new ResourceNotFoundException("Post not found with id: " + id);
+                        }
                 return mapToDto(post);
         }
 
         public Page<PostDto> getAllPosts(int page, int size) {
                 Pageable pageable = PageRequest.of(page, size);
-                Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+                        Page<Post> posts = postRepository.findAllByHiddenFalseOrderByCreatedAtDesc(pageable);
 
                 // Fetch all media in one query to avoid N+1 problem
                 List<UUID> postIds = posts.getContent().stream()
@@ -124,7 +127,7 @@ public class PostService {
 
         public Page<PostDto> getPostsByUser(UUID userId, int page, int size) {
                 Pageable pageable = PageRequest.of(page, size);
-                Page<Post> posts = postRepository.findByOwnerIdOrderByCreatedAtDesc(userId, pageable);
+                        Page<Post> posts = postRepository.findByOwnerIdAndHiddenFalseOrderByCreatedAtDesc(userId, pageable);
 
                 // Fetch all media in one query to avoid N+1 problem
                 List<UUID> postIds = posts.getContent().stream()
@@ -142,7 +145,7 @@ public class PostService {
                 // fetch subscriptions (users the current user follows)
                 Pageable pageable = PageRequest.of(page, size);
 
-                Page<Post> posts = postRepository.findPostsForSubscriber(user, pageable);
+                Page<Post> posts = postRepository.findVisiblePostsForSubscriber(user, pageable);
 
                 List<UUID> postIds = posts.getContent().stream()
                                 .map(Post::getId)
