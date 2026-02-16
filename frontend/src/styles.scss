@@ -14,7 +14,7 @@ $wizard-primary: (
   600: #8e24aa,
   700: #7b1fa2,
   800: #6a1b9a,
-  900: #4a148c,
+  900: hsl(267, 54%, 61%),
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
@@ -34,13 +34,13 @@ $wizard-accent: (
   100: #ffecb3,
   200: #ffe082,
   300: #ffffff,
-  400: #ffca28,
-  500: #ffc107,
+  400: #d3d2cf,
+  500: #fafafa,
   // Enchanted gold
-  600: #ffb300,
-  700: #ffa000,
-  800: #ff8f00,
-  900: #ff6f00,
+  600: #cbcbcb,
+  700: #dcdcdc,
+  800: #ffffff,
+  900: #b9b4b0,
   contrast: (
     50: rgba(black, 0.87),
     100: rgba(black, 0.87),
@@ -152,7 +152,7 @@ mat-icon svg,
 .arcane-border {
   border: 2px solid transparent;
   background: linear-gradient(#1a0a2e, #1a0a2e) padding-box,
-    linear-gradient(135deg, #9c27b0, #ffc107, #9c27b0) border-box;
+    linear-gradient(135deg, #9c27b0, #fdfdfc, #9c27b0) border-box;
   border-radius: 8px;
 }
 

@@ -57,8 +57,8 @@ A fullstack social blogging platform built with Spring Boot and Angular, designe
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd 01blog
+git clone https://github.com/madaghaxx/noctua
+cd noctua
 ```
 
 ### 2. Backend Setup
@@ -76,24 +76,6 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-#### Manual Setup
-
-```bash
-# Install PostgreSQL and create database
-createdb blogdb
-
-# Update database credentials in backend/src/main/resources/application.properties
-# Default credentials: username=tenno, password=vor_speaks_truth
-
-# Navigate to backend directory
-cd backend
-
-# Run the application
-./mvnw spring-boot:run
-```
-
-The backend will start on `http://localhost:8080`
-
 ### 3. Frontend Setup
 
 ```bash
@@ -104,7 +86,7 @@ cd frontend
 npm install
 
 # Start development server
-ng serve
+npm start
 ```
 
 The frontend will start on `http://localhost:4200`
@@ -206,71 +188,11 @@ The application uses PostgreSQL with the following main entities:
 
 ## 🔧 Configuration
 
-### Environment Variables
-
-Create `.env` file in the backend directory:
-
-```properties
-# Database
-DB_URL=jdbc:postgresql://localhost:5432/blogdb
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-
-# JWT
-JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRATION=86400000
-
-# File Upload
-UPLOAD_DIR=uploads
-MAX_FILE_SIZE=10MB
-```
-
 ### File Upload Configuration
 
 - Maximum file size: 10MB
 - Supported formats: Images (JPEG, PNG, GIF) and Videos (MP4, AVI)
 - Files stored in `uploads/` directory
-
-## 🧪 Testing
-
-### Backend Tests
-
-```bash
-cd backend
-./mvnw test
-```
-
-### Frontend Tests
-
-```bash
-cd frontend
-ng test
-```
-
-## 🚀 Deployment
-
-### Backend Deployment
-
-```bash
-cd backend
-./mvnw clean package
-java -jar target/blog-backend-1.0.0.jar
-```
-
-### Frontend Deployment
-
-```bash
-cd frontend
-ng build --prod
-# Serve the dist/ directory with any web server
-```
-
-### Docker Deployment
-
-```bash
-# Build and run with Docker Compose
-docker-compose up --build
-```
 
 ## 🤝 Contributing
 
@@ -280,13 +202,9 @@ docker-compose up --build
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 👥 Authors
 
-- **Madagha** - _Initial work_
+- **Madagha**
 
 ## 🙏 Acknowledgments
 
